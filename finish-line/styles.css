@@ -1,0 +1,51 @@
+canvas {
+    border: 10px solid black;
+    background-image: url(images/Coding_Canvas.png);
+}
+
+button {
+    font-size: larger;
+    background-color: yellow;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: orange;
+    font-size: x-large;
+}
+
+#mario-button {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 120px;
+}
+
+#luigi-button {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    font-size: 120px;
+}
+
+/* Add style for Peach button */
+#peach-button {
+    background-color: pink;
+    color: white;
+    font-weight: bold;
+    font-size: 120px;
+}
+
+#restart-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#image-selection {
+    text-align: center;
+}
