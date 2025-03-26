@@ -202,7 +202,7 @@ function component(width, height, image, x, y, isFollower = false) {
 }
 
 // Connect to the backend server
-const socket = io("https://your-project-name.vercel.app"); // Replace with your Vercel URL
+const socket = io("https://coolplaynewgame.vercel.app"); // Use your Vercel URL
 
 // Listen for updates to the player list
 socket.on("updatePlayers", (players) => {
