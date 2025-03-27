@@ -12,13 +12,24 @@ finishLineImage.src = "images/Finish-Line.png"; // Ensure this path is correct
 var gravity = 0.05; // Add gravity
 var onGround = false; // Add flag to check if character is on the ground
 
+const socket = io(); // Connect to the server
+
+let players = {}; // Store all players
+
+// Listen for updates from the server
+socket.on("updatePlayers", (serverPlayers) => {
+	players = serverPlayers;
+});
+
 document.getElementById("mario-button").addEventListener("click", function () {
+	socket.emit("selectCharacter", "Mario");
 	startGame("images/Mario_Jump.png");
 	isLuigi = false;
 	isPeach = false;
 });
 
 document.getElementById("luigi-button").addEventListener("click", function () {
+	socket.emit("selectCharacter", "Luigi");
 	startGame("images/Luigi_Jump.png");
 	isLuigi = true;
 	isPeach = false;
@@ -26,6 +37,7 @@ document.getElementById("luigi-button").addEventListener("click", function () {
 
 // Add event listener for Peach button
 document.getElementById("peach-button").addEventListener("click", function () {
+	socket.emit("selectCharacter", "Peach");
 	startGame("images/Peach_Jump.png"); // Correct the image source
 	isLuigi = false;
 	isPeach = true;
@@ -171,8 +183,24 @@ function component(width, height, image, x, y, type) {
 function updateGameArea() {
 	if (gameOver) return;
 	myGameArea.clear();
+
+	// Update local player position
 	myGamePiece.newPos();
 	myGamePiece.update();
+
+	// Send movement data to the server
+	socket.emit("move", { x: myGamePiece.x, y: myGamePiece.y });
+
+	// Render all players
+	for (const id in players) {
+		if (id !== socket.id) {
+			const player = players[id];
+			const img = new Image();
+			img.src = `images/${player.character}_Jump.png`;
+			myGameArea.context.drawImage(img, player.x, player.y, 70, 100);
+		}
+	}
+
 	myFinishLine.update();
 
 	if (myGamePiece.x < 0) {
