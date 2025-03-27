@@ -33,6 +33,16 @@ document.getElementById("peach-button").addEventListener("click", function () {
 	isPeach = true;
 });
 
+(() => {
+	// Define the startGame function
+	function startGame(imageSrc) {
+		console.log(`Starting game with character image: ${imageSrc}`);
+		// Add game initialization logic here
+	}
+
+	// Add other game logic here
+})();
+
 function startGame(imageSrc) {
 	document.getElementById("image-selection").style.display = "none";
 	myGameArea.start();
