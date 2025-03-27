@@ -1,6 +1,6 @@
 {
     "rewrites": [
         { "source": "/socket.io/:path*", "destination": "/server.js" },
-        { "source": "/:path*", "destination": "/:path*" } <!-- Ensure static files are served -->
+        { "source": "/:path*", "destination": "/:path*" }
     ]
 }

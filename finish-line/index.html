@@ -2,8 +2,7 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" type="text/css" href="../Styles.css" />
-		<!-- Fix relative path -->
+		<link rel="stylesheet" type="text/css" href="/Styles.css" /> <!-- Use absolute path -->
 	</head>
 	<body>
 		<div id="image-selection">
@@ -23,8 +22,7 @@
 		</div>
 		<canvas id="gameCanvas" style="display: none"></canvas>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="./script.js"></script>
-		<!-- Fix relative path -->
+		<script src="/finish-line/script.js"></script> <!-- Use absolute path -->
 		<div id="restart-button-container"></div>
 	</body>
 </html>
