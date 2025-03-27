@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="/drag-game/styles.css" />
+	</head>
+	<body>
+		<div id="image-selection">
+			<button
+				id="mario-button"
+				onclick="startGame('/drag-game/images/Mario_Jump.png')"
+			>
+				Select Mario
+			</button>
+			<button
+				id="luigi-button"
+				onclick="startGame('/drag-game/images/Luigi_Jump.png')"
+			>
+				Select Luigi
+			</button>
+			<button
+				id="peach-button"
+				onclick="startGame('/drag-game/images/Peach_Jump.png')"
+			>
+				Select Peach
+			</button>
+			<div style="font-size: 153px">
+				<p>15 Coins <a href="/drag-game/index.html">Home Page</a></p>
+			</div>
+			<div
+				id="score-board"
+				style="
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					background: white;
+					padding: 10px;
+					border: 1px solid black;
+				"
+			>
+				<h3>Scoreboard</h3>
+			</div>
+		</div>
+		<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+		<script src="/drag-game/script.js" defer></script>
+		<div id="restart-button-container"></div>
+	</body>
+</html>
