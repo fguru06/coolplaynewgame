@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+	</head>
+	<body>
+		<div id="image-selection">
+			<button id="mario-button" onclick="startGame('images/Mario_Jump.png')">
+				Select Mario
+			</button>
+			<button id="luigi-button" onclick="startGame('images/Luigi_Jump.png')">
+				Select Luigi
+			</button>
+			 <!-- Correct the image path for Peach -->
+			<button id="peach-button" onclick="startGame('images/Peach_Jump.png')">
+				Select Peach
+			</button>
+			<div style="font-size: 170px">
+				<p>"Race" <a href="../index.html">Home Page</a></p>
+			</div>
+		</div>
+		<canvas id="gameCanvas" style="display: none"></canvas>
+		<script src="script.js"></script>
+		<div id="restart-button-container"></div>
+	</body>
+</html>
