@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.12);
+            padding: 32px 24px 24px 24px;
+            max-width: 400px;
+            width: 100%;
+            margin: 32px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+    }
+    h1 {
+      font-weight: 700;
+      font-size: 2.2em;
+      margin-bottom: 12px;
+      color: #2d3748;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 70px);
+      grid-gap: 10px;
+      margin: 24px auto 16px auto;
+    }
+    .cell {
+            width: 70px;
+            height: 70px;
+            font-size: 3.5em;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+    }
+    .cell:hover {
+      background: #e2e8f0;
+    }
+    #status {
+      margin: 18px 0 8px 0;
+      font-size: 1.15em;
+      color: #475569;
+    }
+    button {
+      border: none;
+      color: #fff;
+      padding: 14px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 1em;
+      margin: 10px 0 0 0;
+      transition-duration: 0.6s;
+      cursor: pointer;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f44336 0%, #ff9393 100%);
+      box-shadow: 0 2px 8px rgba(244,67,54,0.08);
+    }
+    button:hover {
+      font-size: large;
+      box-shadow: 0 4px 16px rgba(244,67,54,0.16);
+    }
+    #scoreboard {
+            margin: 24px auto 0 auto;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            border: none;
+            border-radius: 14px;
+            padding: 18px 0 10px 0;
+            background: #f1f5f9;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    #scoreboard h2 {
+      font-size: 1.3em;
+      color: #ef4444;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    #scoreboard div {
+      font-size: 1.1em;
+      color: #334155;
+    }
+    #scoreboard span {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+      <h1>Tic-Tac-Toe</h1>
+      <div id="status">Player X's turn</div>
+      <div id="board"></div>
+      <button onclick="resetGame()">Restart Game</button>
+  <!-- Party Popper Animation -->
+  <div id="popper-container" style="position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></div>
+  <!-- Winning Sound -->
+  <audio id="win-audio" src="you-win-sequence-3-183950.mp3" preload="auto"></audio>
+      <!-- Scoreboard Section -->
+      <div id="scoreboard">
+        <h2>Scoreboard</h2>
+        <div style="margin-bottom: 10px;">
+          <div style="margin-bottom: 8px;">
+            <span id="playerXName">Player X</span>: <span id="playerXScore">0</span>
+          </div>
+          <div>
+            <span id="playerOName">Player O</span>: <span id="playerOScore">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
