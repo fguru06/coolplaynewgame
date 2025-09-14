@@ -233,6 +233,17 @@ function updateGameArea() {
 			if (score < 15) {
 				myGameArea.stop();
 				gameOver = true;
+                // Play losing sound
+                var loseAudio = document.getElementById("lose-audio");
+                if (loseAudio) {
+                    loseAudio.currentTime = 0;
+                    loseAudio.volume = 1;
+                    loseAudio.muted = false;
+                    loseAudio.play().catch(function(e) {
+                        alert("Click OK to play the losing sound!");
+                        loseAudio.play();
+                    });
+                }
 				setTimeout(function () {
 					var gameOverImage = new Image();
 					gameOverImage.src = isPeach
@@ -263,6 +274,18 @@ function updateGameArea() {
 			coins.splice(i, 1);
 			i--;
 			score++;
+			// Play coin collected sound
+			var coinAudio = document.getElementById("coin-audio");
+			if (coinAudio) {
+				coinAudio.currentTime = 0;
+				coinAudio.volume = 1;
+				coinAudio.muted = false;
+				coinAudio.play().catch(function(e) {
+					// If playback is blocked, prompt user to click a button to play sound
+					alert("Click OK to play the coin sound!");
+					coinAudio.play();
+				});
+			}
 		} else {
 			coins[i].update();
 		}
@@ -309,6 +332,18 @@ function Congrats() {
 	);
 
 	myGameArea.canvas.style.backgroundImage = "url('images/Congrats.png')";
+	// Play win audio with autoplay handling
+	var winAudio = document.getElementById("win-audio");
+	if (winAudio) {
+		winAudio.currentTime = 0;
+		winAudio.volume = 1;
+		winAudio.muted = false;
+		winAudio.play().catch(function(e) {
+			// If playback is blocked, prompt user to click a button to play sound
+			alert("Click OK to play the win sound!");
+			winAudio.play();
+		});
+	}
 	if (!document.getElementById("restart-button")) {
 		new RestartButton(0, 0, 200, 50, "Restart Game");
 	}

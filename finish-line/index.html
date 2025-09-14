@@ -16,11 +16,11 @@
 			<button id="peach-button" onclick="startGame('images/Peach_Jump.png')">
 				Select Peach
 			</button>
-			<div style="font-size: 170px">
-				<p>"Race" <a href="../index.html">Home Page</a></p>
-			</div>
+			<button onclick="window.location.href='../index.html'">Home</button>
 		</div>
 		<canvas id="gameCanvas" style="display: none"></canvas>
+		<audio id="win-audio" src="../drag-game/Mario-type-beat.mp3" preload="auto"></audio>
+		<audio id="lose-audio" src="../drag-game/Losing-sound.mp3" preload="auto"></audio>
 		<script src="script.js"></script>
 		<div id="restart-button-container"></div>
 	</body>

@@ -215,6 +215,17 @@ function updateGameArea() {
 		if (myGamePiece.crashWith(myObstacles[i])) {
 			myGameArea.stop();
 			gameOver = true;
+			// Play losing sound
+			var loseAudio = document.getElementById("lose-audio");
+			if (loseAudio) {
+				loseAudio.currentTime = 0;
+				loseAudio.volume = 1;
+				loseAudio.muted = false;
+				loseAudio.play().catch(function(e) {
+					alert("Click OK to play the losing sound!");
+					loseAudio.play();
+				});
+			}
 			setTimeout(function () {
 				var gameOverImage = new Image();
 				gameOverImage.src = isPeach
@@ -248,6 +259,17 @@ function updateGameArea() {
 		myObstacles = [];
 		myGameArea.clear();
 		myGameArea.canvas.style.backgroundImage = "url('images/Congrats.png')";
+        // Play win sound
+        var winAudio = document.getElementById("win-audio");
+        if (winAudio) {
+            winAudio.currentTime = 0;
+            winAudio.volume = 1;
+            winAudio.muted = false;
+            winAudio.play().catch(function(e) {
+                alert("Click OK to play the win sound!");
+                winAudio.play();
+            });
+        }
 		// Show the restart button
 		if (!document.getElementById("restart-button")) {
 			new RestartButton(650, 400, 200, 50, "Restart Game");

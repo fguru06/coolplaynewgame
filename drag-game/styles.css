@@ -3,6 +3,20 @@ canvas {
     background-image: url(images/Coding_Canvas.png);
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#image-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
 button {
     font-size: larger;
     background-color: yellow;
@@ -12,6 +26,9 @@ button {
     cursor: pointer;
     border-radius: 5px;
     transition-duration: 0.4s;
+    min-width: 120px;
+    min-height: 40px;
+    flex: 1 1 120px;
 }
 
 button:hover {
@@ -23,24 +40,37 @@ button:hover {
     background-color: red;
     color: white;
     font-weight: bold;
-    font-size: 120px;
+    font-size: 2em;
 }
 
 #luigi-button {
     background-color: green;
     color: white;
     font-weight: bold;
-    font-size: 120px;
+    font-size: 2em;
 }
 
 #peach-button {
     background-color: pink;
     color: white;
     font-weight: bold;
-    font-size: 120px;
+    font-size: 2em;
 }
 
 #restart-button-container {
     text-align: center;
     margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    #image-selection {
+        flex-direction: column;
+        gap: 15px;
+    }
+    button {
+        font-size: 1em;
+        min-width: 80vw;
+        min-height: 40px;
+        padding: 12px 0;
+    }
 }

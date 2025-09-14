@@ -3,15 +3,18 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="styles.css" />
+        <link rel="icon" href="data:,">
     </head>
     <body>
         <div id="image-selection">
             <button id="mario-button" onclick="startGame('images/Mario_Jump.png')">Select Mario</button>
             <button id="luigi-button" onclick="startGame('images/Luigi_Jump.png')">Select Luigi</button>
             <button id="peach-button" onclick="startGame('images/Peach_Jump.png')">Select Peach</button>
-            <div style="font-size: 153px;"><p>15 Coins <a href="../index.html">Home Page</a></p>
-        </div>
+            <button onclick="window.location.href='../index.html'">Home</button>
     </div>
+        <audio id="win-audio" src="mario-type-beat.mp3" preload="auto"></audio>
+        <audio id="coin-audio" src="Coin-collected.mp3" preload="auto"></audio>
+        <audio id="lose-audio" src="Losing-sound.mp3" preload="auto"></audio>
         <script src="script.js"></script>
         <div id="restart-button-container"></div>
     </body>
