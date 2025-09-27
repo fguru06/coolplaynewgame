@@ -1,6 +1,15 @@
 canvas {
+    width: 100%;
+    max-width: 600px; /* or any max size you want */
     border: 10px solid black;
     background-image: url(images/Coding_Canvas.png);
+    background-size: cover;
+    width: 90vw;
+    max-width: 90%;
+    height: auto;
+    aspect-ratio: 15 / 8.25;
+    display: block;
+    margin: 0 auto;
 }
 
 body {
@@ -64,11 +73,14 @@ button:hover {
     margin-top: 20px;
 }
 
-#image-selection {
-        /* text-align handled by flexbox above */
-}
+
 
 @media (max-width: 600px) {
+    canvas {
+        width: 95vw;
+        max-width: 320px;
+        height: auto;
+    }
     #image-selection {
         flex-direction: column;
         gap: 15px;
