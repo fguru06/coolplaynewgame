@@ -70,19 +70,7 @@ var myGameArea = {
 		window.addEventListener("keyup", function (e) {
 			myGameArea.keys[e.keyCode] = e.type == "keydown";
 		});
-		// Refine touch event handling for smoother movement
-		this.canvas.addEventListener("touchstart", function (e) {
-			e.preventDefault(); // Prevent default touch behavior
-			myGameArea.touch = e.touches[0];
-		});
-		this.canvas.addEventListener("touchmove", function (e) {
-			e.preventDefault(); // Prevent default touch behavior
-			myGameArea.touch = e.touches[0];
-		});
-		this.canvas.addEventListener("touchend", function (e) {
-			e.preventDefault(); // Prevent default touch behavior
-			myGameArea.touch = null;
-		});
+
 	},
 	clear: function () {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -128,11 +116,7 @@ function component(width, height, image, x, y, type) {
 		if (myGameArea.keys && myGameArea.keys[39]) {
 			this.x += 2;
 		}
-		// Handle touch movement
-		if (myGameArea.touch) {
-			this.x = myGameArea.touch.clientX - myGameArea.canvas.offsetLeft - this.width / 2;
-			this.y = myGameArea.touch.clientY - myGameArea.canvas.offsetTop - this.height / 2;
-		}
+		   // Touch movement removed
 	};
 	this.crashWith = function (otherobj) {
 		var myleft = this.x;
