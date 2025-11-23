@@ -57,3 +57,16 @@
     color: black;
 }
 
+.button4 {
+    font-size: large;
+    background-color: white;
+    color: black;
+    border: 2px solid #FFB800;
+    border-radius: 8px;
+}
+
+.button4:hover {
+    font-size: x-large;
+    background: linear-gradient(90deg, white 0%, #FFB800 100%);
+    color: black;
+}
