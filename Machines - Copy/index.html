@@ -1,0 +1,85 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Completion Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="starSelection" class="star-selection-container">
+        <h1>Machine Completion Game</h1>
+        <h2>Pick Your Skillcheck Difficulty</h2>
+        
+        <div class="star-options">
+            <div class="star-option" onclick="selectStars(1)">
+                <div class="star-rating">⭐</div>
+                <h3>1 Star</h3>
+                <p>Big skillcheck size</p>
+                <p>Small completion reward</p>
+            </div>
+            
+            <div class="star-option" onclick="selectStars(2)">
+                <div class="star-rating">⭐⭐</div>
+                <h3>2 Stars</h3>
+                <p>Middle-big skillcheck size</p>
+                <p>Middle-small completion reward</p>
+            </div>
+            
+            <div class="star-option" onclick="selectStars(3)">
+                <div class="star-rating">⭐⭐⭐</div>
+                <h3>3 Stars</h3>
+                <p>Middle-sized skillcheck</p>
+                <p>Middle completion reward</p>
+            </div>
+            
+            <div class="star-option" onclick="selectStars(4)">
+                <div class="star-rating">⭐⭐⭐⭐</div>
+                <h3>4 Stars</h3>
+                <p>Middle-small skillcheck size</p>
+                <p>Middle-big completion reward</p>
+            </div>
+            
+            <div class="star-option" onclick="selectStars(5)">
+                <div class="star-rating">⭐⭐⭐⭐⭐</div>
+                <h3>5 Stars</h3>
+                <p>Small skillcheck size</p>
+                <p>Big completion reward</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameContainer" class="game-container" style="display: none;">
+        <h1>Machine Completion Game</h1>
+        
+        <div class="instructions">
+            <h2>Instructions</h2>
+            <p><strong>Press 'E'</strong> to access the machine</p>
+            <p><strong>Press 'SPACE'</strong> when the red line is in the white box for normal progress</p>
+            <p><strong>Press 'SPACE'</strong> when the red line is in the yellow box for 3x progress!</p>
+            <p>Complete the machine by filling the progress bar to 100%</p>
+        </div>
+
+        <div class="machine" id="machine">
+            <h2>Machine Status</h2>
+            <div class="status" id="status">Press 'E' to activate</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="machine-line-container" id="machineArea" style="display: none;">
+                <div class="grey-line"></div>
+                <div class="white-box" id="whiteBox">
+                    <div class="yellow-box" id="yellowBox"></div>
+                </div>
+                <div class="red-line" id="redLine"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
