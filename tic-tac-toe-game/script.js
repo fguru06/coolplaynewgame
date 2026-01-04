@@ -64,6 +64,28 @@ const playerXScoreSpan = document.getElementById('playerXScore');
 const playerOScoreSpan = document.getElementById('playerOScore');
 let playerXScore = 0;
 let playerOScore = 0;
+let isCPU = null; // null = not chosen, false = friend, true = cpu opponent (plays as O)
+
+// Mode buttons
+const modeFriendBtn = document.getElementById('mode-friend');
+const modeCpuBtn = document.getElementById('mode-cpu');
+modeFriendBtn.addEventListener('click', () => setMode(false));
+modeCpuBtn.addEventListener('click', () => setMode(true));
+function setMode(cpu) {
+    isCPU = cpu;
+    if (isCPU) {
+        modeFriendBtn.style.opacity = '0.7';
+        modeCpuBtn.style.opacity = '1';
+    } else {
+        modeFriendBtn.style.opacity = '1';
+        modeCpuBtn.style.opacity = '0.7';
+    }
+    // start/reset the game when a mode is chosen
+    resetGame();
+    // hide the opponent selection controls after choosing
+    const sel = document.getElementById('opponent-select');
+    if (sel) sel.style.display = 'none';
+}
 
 function renderBoard() {
     boardDiv.innerHTML = '';
@@ -79,14 +101,46 @@ function renderBoard() {
 }
 
 function handleCellClick(row, col) {
+    // Don't allow moves until opponent is chosen
+    if (isCPU === null) return;
+    // if CPU mode and it's O's turn, ignore human clicks
+    if (isCPU && game.currentPlayer === 'O') return;
     if (game.winner || game.board[row][col] !== '') return;
     game.makeMove(row, col);
     updateStatus();
     renderBoard();
     updateScoreboard();
+
+    // If CPU mode and game continues and it's O's turn, let CPU play
+    if (isCPU && !game.winner && game.currentPlayer === 'O') {
+        setTimeout(() => {
+            makeCpuMove();
+            updateStatus();
+            renderBoard();
+            updateScoreboard();
+        }, 400);
+    }
+}
+
+function makeCpuMove() {
+    // simple random CPU: pick a random empty cell
+    const empty = [];
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            if (game.board[r][c] === '') empty.push([r, c]);
+        }
+    }
+    if (empty.length === 0) return;
+    const [r, c] = empty[Math.floor(Math.random() * empty.length)];
+    game.makeMove(r, c);
 }
 
 function updateStatus() {
+    // If opponent not chosen yet, prompt the user and block play
+    if (isCPU === null && !game.winner) {
+        statusDiv.textContent = "Choose opponent: Friend or CPU";
+        return;
+    }
     if (game.winner === 'Draw') {
         statusDiv.textContent = "It's a draw!";
     } else if (game.winner) {

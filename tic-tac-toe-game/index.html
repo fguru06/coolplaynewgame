@@ -105,12 +105,23 @@
     #scoreboard span {
       font-weight: 500;
     }
+    /* Opponent button gradients */
+    #opponent-select button { padding:8px 12px; border-radius:8px; color:white; border:none; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.12); transition:transform 0.18s, box-shadow 0.18s; }
+    #mode-friend { background: linear-gradient(90deg,orange 0%,#fffb00 100%); }
+    #mode-friend:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(75,85,99,0.24); }
+    #mode-cpu { background: linear-gradient(90deg,rgb(0, 245, 0) 0%,rgb(0, 255, 213) 100%); }
+    #mode-cpu:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(5,150,105,0.24); }
   </style>
 </head>
 <body>
     <div class="container">
       <h1>Tic-Tac-Toe</h1>
       <div id="status">Player X's turn</div>
+      <div id="opponent-select" style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+        <div style="font-size:0.95rem;color:#475569">Opponent:</div>
+        <button id="mode-friend">Friend</button>
+        <button id="mode-cpu">CPU</button>
+      </div>
       <div id="board"></div>
       <button onclick="resetGame()">Restart Game</button>
       <button onclick="window.location.href='../index.html'">Home</button>

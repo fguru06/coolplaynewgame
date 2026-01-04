@@ -11,11 +11,16 @@
     cursor: pointer;
 }
 
+/* Page background gradient */
+body {
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+}
+
 .button1 {
     font-size: large;
-    background-color: white;
-    color: black;
-    border: 2px solid yellow;
+    background: linear-gradient(90deg,#FFD54F 0%,#FF8A65 100%);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.2);
     border-radius: 8px;
 }
 
@@ -28,9 +33,9 @@
 
 .button2 {
     font-size: large;
-    background-color: white;
-    color: black;
-    border: 2px solid black;
+    background: linear-gradient(90deg,#81D4FA 0%,#29B6F6 100%);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
     border-radius: 8px;
 }
 
@@ -45,9 +50,9 @@
 
 .button3 {
     font-size: large;
-    background-color: white;
-    color: black;
-    border: 2px solid red;
+    background: linear-gradient(90deg,#FF8A80 0%,#FF5252 100%);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
     border-radius: 8px;
 }
 
@@ -59,14 +64,26 @@
 
 .button4 {
     font-size: large;
-    background-color: white;
-    color: black;
-    border: 2px solid #FFB800;
+    background: linear-gradient(90deg,#FFD86F 0%,#FFB86F 100%);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
     border-radius: 8px;
 }
 
 .button4:hover {
     font-size: x-large;
-    background: linear-gradient(90deg, white 0%, #FFB800 100%);
-    color: black;
+    background: linear-gradient(90deg,#FFB86F 0%,#FF8A65 100%);
+    color: white;
 }
+
+/* Homepage styles */
+.home { padding:24px; max-width:1100px; margin:0 auto }
+.intro { text-align:center; margin:18px 0 28px; color:#333 }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px }
+.card { background: linear-gradient(180deg,#ffffff 0%, #f8fafc 100%); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(15,15,30,0.06); text-align:center }
+.card-icon { font-size:42px; margin-bottom:8px }
+.card h3 { margin:8px 0 6px; font-size:1.1rem }
+.card p { margin:0 0 12px; color:#555; font-size:0.95rem }
+.card .button { display:inline-block; padding:10px 16px; border-radius:8px; background: linear-gradient(90deg,#00a8ff,#0066cc); color:white; border:0; text-decoration:none }
+.card .button:hover { background: linear-gradient(90deg,#0087d1,#0066cc) }
+.site-footer { margin:28px 0 60px; text-align:center; color:#666 }

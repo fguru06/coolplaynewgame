@@ -1,22 +1,61 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>My Games</title>
-    <link rel="stylesheet" type="text/css" href="Styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Musa's Games</title>
+    <link rel="stylesheet" href="Styles.css" />
     <link rel="icon" href="data:,">
+    <style>
+        /* Small inline safety styles so page looks ok before external CSS loads */
+        body { margin:0; font-family:Verdana, Geneva, Tahoma, sans-serif; background:#f6f7fb; color:#111 }
+    </style>
 </head>
 <body>
-    <div style="text-align:center;font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 2rem;">
-<p>Musa's PERSONAL coded games!</p>
- <button class="button button1" onclick="window.location.href='drag-game/';">15 Coins</button>
- <button class="button button2" onclick="window.location.href='finish-line/';">Race</button>
- <button class="button button3" onclick="window.location.href='tic-tac-toe-game/';">Tic-Tac-Toe</button>
- <button class="button button4" onclick="window.location.href='Machines - Copy';">Machine Completion Game (Latest)</button>
-</pre>
-    <div id="restart-button-container"></div>
-    <div id="restart-button-container"></div>
-    </div>
+    <header style="padding:28px 18px; text-align:center; background:linear-gradient(90deg,#6c5ce7,#00b894); color:white;">
+        <h1 style="margin:0;font-size:1.8rem;">Musa's Games</h1>
+        <p style="margin:6px 0 0;opacity:0.95">A small collection of games I coded</p>
+    </header>
+
+    <main class="home">
+        <section class="intro">
+            <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <div class="card-icon">🪙</div>
+                <h3>15 Coins</h3>
+                <p>Collect coins while avoiding obstacles.</p>
+                <a class="button" href="drag-game/">Play</a>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">🏁</div>
+                <h3>Race (Finish Line)</h3>
+                <p>Run to the finish line while jumping over hazards.</p>
+                <a class="button" href="finish-line/">Play</a>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">❌⭕</div>
+                <h3>Tic-Tac-Toe</h3>
+                <p>Classic Tic-Tac-Toe vs AI or a friend.</p>
+                <a class="button" href="tic-tac-toe-game/">Play</a>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">🛠️</div>
+                <h3>Machine Completion</h3>
+                <p>Latest iteration of the machine completion game.</p>
+                <a class="button" href="Machines - Copy/">Play</a>
+            </article>
+        </section>
+
+        <footer class="site-footer">
+            <small>Built by Musa • Open these folders locally to edit the games.</small>
+        </footer>
+    </main>
+
 </body>
 </html>

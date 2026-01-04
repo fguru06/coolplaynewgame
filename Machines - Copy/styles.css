@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #1a1a1a;
+    background: linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);
     color: white;
     display: flex;
     justify-content: center;
@@ -39,7 +39,7 @@ body {
 }
 
 .star-option {
-    background: #2a2a2a;
+    background: linear-gradient(180deg,#2b2b2b 0%,#1f2a2a 100%);
     padding: 30px 20px;
     border-radius: 10px;
     cursor: pointer;
@@ -51,7 +51,7 @@ body {
 .star-option:hover {
     transform: translateY(-5px);
     border-color: #4CAF50;
-    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.25);
 }
 
 .star-rating {
@@ -75,7 +75,7 @@ body {
 }
 
 .machine {
-    background: #2a2a2a;
+    background: linear-gradient(180deg,#2c2c2c 0%,#1b2930 100%);
     padding: 40px;
     border-radius: 10px;
     margin: 20px auto;
@@ -95,7 +95,7 @@ body {
     left: 0;
     right: 0;
     height: 40px;
-    background: #555;
+    background: linear-gradient(90deg,#6b6b6b 0%,#4a4a4a 100%);
     transform: translateY(-50%);
 }
 
@@ -105,7 +105,7 @@ body {
     left: 35%;
     width: 120px;
     height: 40px;
-    background: white;
+    background: linear-gradient(90deg,#ffffff 0%,#f3f4f6 100%);
     border: none;
     transform: translateY(-50%);
 }
@@ -116,7 +116,7 @@ body {
     left: 50%;
     width: 40px;
     height: 40px;
-    background: #FFB800;
+    background: linear-gradient(90deg,#FFD54F 0%,#FFB74D 100%);
     border: none;
     transform: translate(-50%, -50%);
 }
@@ -126,7 +126,7 @@ body {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: #ff0000;
+    background: linear-gradient(180deg,#ff6b6b 0%,#ff4757 100%);
     left: 0;
     transition: left 0.016s linear;
 }

@@ -1,7 +1,7 @@
 canvas {
     width: 100%;
     max-width: 600px; /* or any max size you want */
-    border: 10px solid black;
+    border: 10px solid #000; /* solid border (no gradient) */
     background-image: url(images/Coding_Canvas.png);
     background-size: cover;
     width: 90vw;
@@ -16,6 +16,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background: linear-gradient(135deg,#f8f9fa 0%,#e8f0f2 100%);
 }
 
 #image-selection {
@@ -29,7 +30,7 @@ body {
 
 button {
     font-size: larger;
-    background-color: yellow;
+    background: linear-gradient(90deg,#FFD95A 0%,#FFB86F 100%);
     color: black;
     border: none;
     padding: 10px 20px;
@@ -42,19 +43,20 @@ button {
 }
 
 button:hover {
-    background-color: orange;
-    font-size: x-large;
+    background: linear-gradient(90deg,#FFB86F 0%,#FF8A65 100%);
+    color: white;
+    transform: translateY(-3px);
 }
 
 #mario-button {
-    background-color: red;
+    background: linear-gradient(90deg,#ff6b6b 0%,#ff4757 100%);
     color: white;
     font-weight: bold;
     font-size: 2em;
 }
 
 #luigi-button {
-    background-color: green;
+    background: linear-gradient(90deg,#7be495 0%,#34d399 100%);
     color: white;
     font-weight: bold;
     font-size: 2em;
@@ -62,7 +64,7 @@ button:hover {
 
 /* Add style for Peach button */
 #peach-button {
-    background-color: pink;
+    background: linear-gradient(90deg,#fbc2eb 0%,#a6c1ee 100%);
     color: white;
     font-weight: bold;
     font-size: 2em;

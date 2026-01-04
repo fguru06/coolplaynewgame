@@ -5,6 +5,7 @@ var myImage = new Image();
 var gameOver = false;
 var isLuigi = false;
 var isPeach = false; // Add flag for Peach
+var useDPad = false;
 var myObstacleImage = new Image();
 myObstacleImage.src = "images/Obstacle.png";
 var finishLineImage = new Image();
@@ -12,23 +13,24 @@ finishLineImage.src = "images/Finish-Line.png"; // Ensure this path is correct
 var gravity = 0.05; // Add gravity
 var onGround = false; // Add flag to check if character is on the ground
 
+function handleCharacterChoice(imageSrc, luigi, peach) {
+	showControlChoiceModal(function(wantsDPad) {
+		useDPad = wantsDPad;
+		isLuigi = luigi;
+		isPeach = peach;
+		startGame(imageSrc);
+		if (useDPad) createDPad();
+	});
+}
+
 document.getElementById("mario-button").addEventListener("click", function () {
-	startGame("images/Mario_Jump.png");
-	isLuigi = false;
-	isPeach = false;
+	handleCharacterChoice("images/Mario_Jump.png", false, false);
 });
-
 document.getElementById("luigi-button").addEventListener("click", function () {
-	startGame("images/Luigi_Jump.png");
-	isLuigi = true;
-	isPeach = false;
+	handleCharacterChoice("images/Luigi_Jump.png", true, false);
 });
-
-// Add event listener for Peach button
 document.getElementById("peach-button").addEventListener("click", function () {
-	startGame("images/Peach_Jump.png"); // Correct the image source
-	isLuigi = false;
-	isPeach = true;
+	handleCharacterChoice("images/Peach_Jump.png", false, true);
 });
 
 function startGame(imageSrc) {
@@ -242,6 +244,7 @@ function updateGameArea() {
 		myFinishLine = null;
 		myObstacles = [];
 		myGameArea.clear();
+		removeDPad();
 		myGameArea.canvas.style.backgroundImage = "url('images/Congrats.png')";
         // Play win sound
         var winAudio = document.getElementById("win-audio");
@@ -284,4 +287,71 @@ function checkCollision() {
 	if (myGamePiece.crashWith(myObstacles)) {
 		myGameArea.stop();
 	}
+}
+
+// Control choice modal and D-pad support (copied/adapted from drag-game)
+function showControlChoiceModal(callback) {
+		if (document.getElementById('control-choice-modal')) return;
+		const modal = document.createElement('div');
+		modal.id = 'control-choice-modal';
+		modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000;';
+		modal.innerHTML = `
+			<div style="background:#fff;padding:32px 24px;border-radius:16px;box-shadow:0 4px 32px #0008;text-align:center;max-width:90vw;">
+				<h2 style='margin-bottom:18px;'>How do you want to move?</h2>
+				<button id="choose-dpad" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Show Arrow Buttons</button>
+				<button id="choose-keys" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Use Keyboard Arrows</button>
+			</div>
+		`;
+		document.body.appendChild(modal);
+		document.getElementById('choose-dpad').onclick = function() {
+				modal.remove();
+				callback(true);
+		};
+		document.getElementById('choose-keys').onclick = function() {
+				modal.remove();
+				callback(false);
+		};
+}
+
+function createDPad() {
+		if (document.getElementById('dpad-container')) return;
+		const dpad = document.createElement('div');
+		dpad.id = 'dpad-container';
+		dpad.innerHTML = `
+			<div style="display:flex;flex-direction:column;align-items:center;position:fixed;bottom:30px;left:30px;z-index:1000;">
+				<button class="dpad-btn" id="dpad-up">▲</button>
+				<div style="display:flex;flex-direction:row;">
+					<button class="dpad-btn" id="dpad-left">◀</button>
+					<button class="dpad-btn" id="dpad-down">▼</button>
+					<button class="dpad-btn" id="dpad-right">▶</button>
+				</div>
+			</div>
+		`;
+		document.body.appendChild(dpad);
+		const style = document.createElement('style');
+		style.textContent = `
+			.dpad-btn {
+				width: 48px; height: 48px; margin: 4px; font-size: 2em; border-radius: 12px; border: 2px solid #333; background: #eee; color: #222; box-shadow: 1px 1px 4px #aaa; }
+			.dpad-btn:active { background: #ccc; }
+		`;
+		document.head.appendChild(style);
+		const keyMap = { 'dpad-up': 38, 'dpad-down': 40, 'dpad-left': 37, 'dpad-right': 39 };
+		Object.keys(keyMap).forEach(id => {
+			const btn = document.getElementById(id);
+			btn.addEventListener('touchstart', e => { e.preventDefault(); simulateKey(keyMap[id], true); });
+			btn.addEventListener('touchend', e => { e.preventDefault(); simulateKey(keyMap[id], false); });
+			btn.addEventListener('mousedown', e => { e.preventDefault(); simulateKey(keyMap[id], true); });
+			btn.addEventListener('mouseup', e => { e.preventDefault(); simulateKey(keyMap[id], false); });
+			btn.addEventListener('mouseleave', e => { e.preventDefault(); simulateKey(keyMap[id], false); });
+		});
+}
+
+function simulateKey(keyCode, isDown) {
+		myGameArea.keys = myGameArea.keys || [];
+		myGameArea.keys[keyCode] = isDown;
+}
+
+function removeDPad() {
+		const dpad = document.getElementById('dpad-container');
+		if (dpad) dpad.remove();
 }
