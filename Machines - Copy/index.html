@@ -57,15 +57,17 @@
         
         <div class="instructions">
             <h2>Instructions</h2>
-            <p><strong>Press 'E'</strong> to access the machine</p>
-            <p><strong>Press 'SPACE'</strong> when the red line is in the white box for normal progress</p>
-            <p><strong>Press 'SPACE'</strong> when the red line is in the yellow box for 3x progress!</p>
+            <p><strong>Press 'Activation Button'</strong> to activate the machine</p>
+            <p><strong>Press Skillcheck Button</strong> when the red line is in the white box for normal progress</p>
+            <p><strong>Press Skillcheck Button</strong> when the red line is in the yellow box for 3x progress!</p>
             <p>Complete the machine by filling the progress bar to 100%</p>
         </div>
 
         <div class="machine" id="machine">
             <h2>Machine Status</h2>
-            <div class="status" id="status">Press 'E' to activate</div>
+            <div class="status" id="status">
+                <button id="activateBtn" onclick="activateMachine()">Activate Machine</button>
+            </div>
             
             <div class="progress-container">
                 <div class="progress-bar">
@@ -80,6 +82,8 @@
                 </div>
                 <div class="red-line" id="redLine"></div>
             </div>
+            
+            <button id="skillcheckBtn" onclick="checkTiming()" style="display: none;">Press Here to Skillcheck</button>
         </div>
     </div>
 

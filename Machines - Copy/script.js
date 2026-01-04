@@ -35,35 +35,48 @@ let GREAT_PROGRESS = 33.33;
 function selectStars(stars) {
     selectedStars = stars;
     const settings = starSettings[stars];
-    
+
     // Update box sizes - keep height at 40px (3-star height), only change width
     whiteBox.style.width = settings.whiteSize + 'px';
     whiteBox.style.height = '40px';
     yellowBox.style.width = settings.yellowSize + 'px';
     yellowBox.style.height = '40px';
-    
-    // Calculate percentages based on 800px container width
-    const containerWidth = 800;
-    const whiteBoxPercent = (settings.whiteSize / containerWidth) * 100;
-    const yellowBoxPercent = (settings.yellowSize / containerWidth) * 100;
-    
-    WHITE_BOX_START = 35;
-    WHITE_BOX_END = WHITE_BOX_START + whiteBoxPercent;
-    
-    const yellowCenter = WHITE_BOX_START + (whiteBoxPercent / 2);
-    YELLOW_BOX_START = yellowCenter - (yellowBoxPercent / 2);
-    YELLOW_BOX_END = yellowCenter + (yellowBoxPercent / 2);
-    
-    GOOD_PROGRESS = settings.goodProgress;
-    GREAT_PROGRESS = settings.greatProgress;
-    
-    // Hide star selection and show game
+
+    // Show game so layout measurements are accurate
     document.getElementById('starSelection').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
+
+    // Measure on next animation frame to ensure styles/layout applied
+    requestAnimationFrame(() => {
+        const containerRect = machineArea.getBoundingClientRect();
+        const whiteRect = whiteBox.getBoundingClientRect();
+        const yellowRect = yellowBox.getBoundingClientRect();
+
+        const containerWidth = containerRect.width || 800;
+
+        // Convert pixel bounds to percentages relative to the machine area
+        WHITE_BOX_START = ((whiteRect.left - containerRect.left) / containerWidth) * 100;
+        WHITE_BOX_END = ((whiteRect.right - containerRect.left) / containerWidth) * 100;
+
+        YELLOW_BOX_START = ((yellowRect.left - containerRect.left) / containerWidth) * 100;
+        YELLOW_BOX_END = ((yellowRect.right - containerRect.left) / containerWidth) * 100;
+
+        GOOD_PROGRESS = settings.goodProgress;
+        GREAT_PROGRESS = settings.greatProgress;
+
+        // Debug info
+        console.log('Container width:', containerWidth);
+        console.log('White Box %:', WHITE_BOX_START, '-', WHITE_BOX_END);
+        console.log('Yellow Box %:', YELLOW_BOX_START, '-', YELLOW_BOX_END);
+    });
 }
 
 // Create buzzer sound
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// Woohoo sound - kid yelling
+const woohooSound = new Audio('homer-woohoo.mp3');
+woohooSound.volume = 0.5;
 
 function playBuzzer() {
     const oscillator = audioContext.createOscillator();
@@ -82,6 +95,12 @@ function playBuzzer() {
     oscillator.stop(audioContext.currentTime + 0.3);
 }
 
+function playWoohoo() {
+    // Play kid woohoo sound
+    woohooSound.currentTime = 0;
+    woohooSound.play().catch(e => console.log('Audio play failed:', e));
+}
+
 // Listen for 'E' key to activate machine
 document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'e' && !isActive && !isCompleted) {
@@ -95,6 +114,12 @@ document.addEventListener('keydown', (e) => {
 function activateMachine() {
     isActive = true;
     machine.classList.remove('inactive');
+    
+    // Hide the activate button
+    const activateBtn = document.getElementById('activateBtn');
+    if (activateBtn) {
+        activateBtn.style.display = 'none';
+    }
     status.textContent = '';
     
     // Start skillcheck cycle every 5 seconds
@@ -128,7 +153,11 @@ function deactivateMachine() {
     redLine.style.left = '0%';
     
     if (!isCompleted) {
-        status.textContent = 'Press \'E\' to activate';
+        const activateBtn = document.getElementById('activateBtn');
+        if (activateBtn) {
+            activateBtn.style.display = 'inline-block';
+        }
+        status.textContent = '';
     }
 }
 
@@ -137,6 +166,13 @@ function startSkillcheck() {
     redLinePosition = 0;
     redLine.style.left = '0%';
     machineArea.style.display = 'block';
+    
+    // Show skillcheck button
+    const skillcheckBtn = document.getElementById('skillcheckBtn');
+    if (skillcheckBtn) {
+        skillcheckBtn.style.display = 'inline-block';
+    }
+    
     status.textContent = 'SKILLCHECK! Press SPACE!';
     startRedLineAnimation();
 }
@@ -169,6 +205,12 @@ function endSkillcheck(immediate = false) {
         animationId = null;
     }
     
+    // Hide skillcheck button
+    const skillcheckBtn = document.getElementById('skillcheckBtn');
+    if (skillcheckBtn) {
+        skillcheckBtn.style.display = 'none';
+    }
+    
     // Delay hiding the machine area so the feedback text is visible
     if (!immediate) {
         setTimeout(() => {
@@ -183,21 +225,38 @@ function endSkillcheck(immediate = false) {
 }
 
 function checkTiming() {
-    const inYellowBox = redLinePosition >= YELLOW_BOX_START && redLinePosition <= YELLOW_BOX_END;
-    const inWhiteBox = redLinePosition >= WHITE_BOX_START && redLinePosition <= WHITE_BOX_END;
-    
-    if (inYellowBox) {
-        // Perfect hit! Great progress
-        addProgress(GREAT_PROGRESS);
-        status.textContent = 'Great!';
-        status.style.color = '#FFD700';
-    } else if (inWhiteBox) {
-        // Good hit, normal progress
-        addProgress(GOOD_PROGRESS);
-        status.textContent = 'Good';
-        status.style.color = '#4CAF50';
+    if (!isSkillcheckActive) return;
+
+    // Compute pixel-based collision using element bounding rects
+    const containerRect = machineArea.getBoundingClientRect();
+    const redRect = redLine.getBoundingClientRect();
+    const whiteRect = whiteBox.getBoundingClientRect();
+    const yellowRect = yellowBox.getBoundingClientRect();
+
+    // Use red line center for collision
+    const redCenter = redRect.left + (redRect.width / 2);
+
+    const inWhiteBox = redCenter >= whiteRect.left && redCenter <= whiteRect.right;
+    const inYellowBox = redCenter >= yellowRect.left && redCenter <= yellowRect.right;
+
+    console.log('Red center(px):', redCenter);
+    console.log('White(px):', whiteRect.left, '-', whiteRect.right, 'Yellow(px):', yellowRect.left, '-', yellowRect.right);
+
+    if (inWhiteBox) {
+        if (inYellowBox) {
+            // Perfect hit in yellow box - Great progress
+            playWoohoo();
+            addProgress(GREAT_PROGRESS);
+            status.textContent = 'Great!';
+            status.style.color = '#FFD700';
+        } else {
+            // Good hit in white box (but not yellow) - normal progress
+            addProgress(GOOD_PROGRESS);
+            status.textContent = 'Good';
+            status.style.color = '#4CAF50';
+        }
     } else {
-        // Miss
+        // Miss - outside white box
         playBuzzer();
         status.textContent = 'Miss';
         status.style.color = '#ff6b6b';
@@ -238,4 +297,12 @@ function completeMachine() {
     status.style.color = '#4CAF50';
     status.style.fontSize = '28px';
     machine.style.border = '3px solid #4CAF50';
+    
+    // Add home button after completion
+    const homeBtn = document.createElement('button');
+    homeBtn.className = 'home-button';
+    homeBtn.textContent = 'Home';
+    homeBtn.onclick = () => window.location.href = '../index.html';
+    homeBtn.style.marginTop = '20px';
+    machine.appendChild(homeBtn);
 }

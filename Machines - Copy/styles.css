@@ -197,6 +197,65 @@ body {
     font-weight: bold;
 }
 
+#activateBtn {
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+#activateBtn:hover {
+    background: linear-gradient(90deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+#activateBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+}
+
+#skillcheckBtn {
+    background: linear-gradient(90deg, #FFB74D, #FF9800);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 183, 77, 0.3);
+    margin-top: 15px;
+    animation: pulse 1s infinite;
+}
+
+#skillcheckBtn:hover {
+    background: linear-gradient(90deg, #FF9800, #FFB74D);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 183, 77, 0.5);
+}
+
+#skillcheckBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(255, 183, 77, 0.4);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
 .machine.inactive {
     opacity: 0.5;
 }
