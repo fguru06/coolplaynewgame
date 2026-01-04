@@ -29,10 +29,11 @@ body {
 }
 
 button {
-    font-size: larger;
-    background: linear-gradient(90deg,#FFD95A 0%,#FFB86F 100%);
-    color: black;
-    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+    background: linear-gradient(90deg,#FFE57F 0%,#FFB74D 100%);
+    border: none; /* Remove the border */
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
