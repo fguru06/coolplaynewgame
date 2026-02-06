@@ -87,3 +87,11 @@ body {
 .card .button { display:inline-block; padding:10px 16px; border-radius:8px; background: linear-gradient(90deg,#00a8ff,#0066cc); color:white; border:0; text-decoration:none }
 .card .button:hover { background: linear-gradient(90deg,#0087d1,#0066cc) }
 .site-footer { margin:28px 0 60px; text-align:center; color:#666 }
+
+/* Projects section */
+.projects-section { margin-top:40px; padding-top:28px; border-top:2px dashed #ccc }
+.section-heading { text-align:center; font-size:1.5rem; margin:0 0 4px; color:#2d3436 }
+.section-sub { text-align:center; color:#636e72; margin:0 0 20px; font-size:0.95rem }
+.project-card { border:2px solid #00b89433; background:linear-gradient(180deg,#e8faf3 0%,#ffffff 100%) }
+.project-btn { background:linear-gradient(90deg,#00b894,#00cec9) !important }
+.project-btn:hover { background:linear-gradient(90deg,#00a381,#00b5b0) !important }
