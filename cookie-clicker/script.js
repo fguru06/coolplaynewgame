@@ -2,6 +2,7 @@
 // Add this to your HTML <head> before script.js:
 // <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 // <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 // --- Auth UI Elements ---
 const emailInput = document.getElementById('emailInput');
@@ -24,39 +26,9 @@ const passwordInput = document.getElementById('passwordInput');
 const signUpBtn = document.getElementById('signUpBtn');
 const signInBtn = document.getElementById('signInBtn');
 const authStatus = document.getElementById('authStatus');
+const saveBtn = document.getElementById('saveBtn');
 
-signUpBtn.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      authStatus.textContent = 'Signed up as: ' + userCredential.user.email;
-    })
-    .catch((error) => {
-      authStatus.textContent = error.message;
-    });
-});
-
-signInBtn.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      authStatus.textContent = 'Signed in as: ' + userCredential.user.email;
-    })
-    .catch((error) => {
-      authStatus.textContent = error.message;
-    });
-});
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    authStatus.textContent = 'Signed in as: ' + user.email;
-  } else {
-    authStatus.textContent = 'Not signed in.';
-  }
-});
-
+// --- Game State ---
 let score = 0;
 let autoClickers = 0;
 let grandmas = 0;
@@ -64,22 +36,18 @@ let factories = 0;
 let mines = 0;
 let banks = 0;
 let portals = 0;
-
 let autoClickerCost = 15;
 let grandmaCost = 80;
 let factoryCost = 400;
 let mineCost = 2000;
 let bankCost = 10000;
 let portalCost = 50000;
-
-// Upgrades
 let silverFingerCount = 0;
 let silverFingerCost = 100;
 let goldenClickerCount = 0;
 let goldenClickerCost = 500;
 let cookieStormCount = 0;
 let cookieStormCost = 2500;
-
 const scoreEl = document.getElementById('score');
 const cookieEl = document.getElementById('cookie');
 const autoClickerBtn = document.getElementById('autoClickerBtn');
@@ -247,3 +215,97 @@ setInterval(() => {
 }, 1000);
 
 updateUI();
+
+// --- Save/Load Functions ---
+function getGameState() {
+  return {
+    score,
+    autoClickers,
+    grandmas,
+    factories,
+    mines,
+    banks,
+    portals,
+    autoClickerCost,
+    grandmaCost,
+    factoryCost,
+    mineCost,
+    bankCost,
+    portalCost,
+    silverFingerCount,
+    silverFingerCost,
+    goldenClickerCount,
+    goldenClickerCost,
+    cookieStormCount,
+    cookieStormCost
+  };
+}
+
+function setGameState(state) {
+  if (!state) return;
+  score = state.score ?? 0;
+  autoClickers = state.autoClickers ?? 0;
+  grandmas = state.grandmas ?? 0;
+  factories = state.factories ?? 0;
+  mines = state.mines ?? 0;
+  banks = state.banks ?? 0;
+  portals = state.portals ?? 0;
+  autoClickerCost = state.autoClickerCost ?? 15;
+  grandmaCost = state.grandmaCost ?? 80;
+  factoryCost = state.factoryCost ?? 400;
+  mineCost = state.mineCost ?? 2000;
+  bankCost = state.bankCost ?? 10000;
+  portalCost = state.portalCost ?? 50000;
+  silverFingerCount = state.silverFingerCount ?? 0;
+  silverFingerCost = state.silverFingerCost ?? 100;
+  goldenClickerCount = state.goldenClickerCount ?? 0;
+  goldenClickerCost = state.goldenClickerCost ?? 500;
+  cookieStormCount = state.cookieStormCount ?? 0;
+  cookieStormCost = state.cookieStormCost ?? 2500;
+  updateUI();
+}
+
+function saveGameState() {
+  const user = auth.currentUser;
+  if (!user) {
+    authStatus.textContent = 'Sign in to save!';
+    return;
+  }
+  db.collection('users').doc(user.uid).set(getGameState())
+    .then(() => {
+      authStatus.textContent = 'Game saved!';
+    })
+    .catch((error) => {
+      authStatus.textContent = 'Save error: ' + error.message;
+    });
+}
+
+function loadGameState() {
+  const user = auth.currentUser;
+  if (!user) return;
+  db.collection('users').doc(user.uid).get()
+    .then((doc) => {
+      if (doc.exists) {
+        setGameState(doc.data());
+        authStatus.textContent = 'Game loaded!';
+      } else {
+        authStatus.textContent = 'No saved game.';
+      }
+    })
+    .catch((error) => {
+      authStatus.textContent = 'Load error: ' + error.message;
+    });
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener('click', saveGameState);
+}
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    authStatus.textContent = 'Signed in as: ' + user.email;
+    loadGameState();
+  } else {
+    authStatus.textContent = 'Not signed in.';
+  }
+});
