@@ -3,14 +3,15 @@
 // <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 // <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
-// Your Firebase config (replace with your own project config)
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBvQw6Qw1Qw5Qw5Qw5Qw5Qw5Qw5Qw5Qw5Qw",
+  apiKey: "AIzaSyAo2NVWVmwXriwoXxzQ9kic66oaSLHqR9U",
   authDomain: "cookies-55555.firebaseapp.com",
   projectId: "cookies-55555",
   storageBucket: "cookies-55555.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890abcdef"
+  messagingSenderId: "243423799460",
+  appId: "1:243423799460:web:05f6fc62b34073a1f15e31",
+  measurementId: "G-ZH0C180YWJ"
 };
 
 // Initialize Firebase
