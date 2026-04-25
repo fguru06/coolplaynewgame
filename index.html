@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Musa's Games</title>
     <link rel="stylesheet" href="Styles.css" />
-    <link rel="icon" href="data:,">
+        <link rel="icon" type="image/svg+xml" href="icon-512.svg">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6c5ce7">
     <style>
@@ -14,11 +14,13 @@
     </style>
 </head>
 <body>
-    <header style="padding:28px 18px; text-align:center; background:linear-gradient(90deg,#6c5ce7,#00b894); color:white;">
-        <h1 style="margin:0;font-size:1.8rem;">Musa's Games</h1>
-        <p style="margin:6px 0 0;opacity:0.95">A small collection of games I coded</p>
-    </header>
-
+    <header class="site-header">
+    <!-- No header logo, branding will be in main area -->
+    
+    <main class="home">
+        <div class="main-logo-area" style="text-align:center; margin: 0 0 18px 0;">
+            <object type="image/svg+xml" data="icon-512.svg" class="main-logo-svg" style="width:160px;max-width:90vw;height:auto;display:inline-block;"></object>
+        </div>
     <main class="home">
             <button id="install-btn" style="display:none;margin:18px auto 0;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
             <p id="install-status" style="margin:10px auto 0;max-width:520px;padding:0 18px;text-align:center;color:#2d3436;"></p>
@@ -39,7 +41,32 @@
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
         const installStatus = document.getElementById('install-status');
+        const userAgent = window.navigator.userAgent;
         const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+        const isWindows = /windows/i.test(userAgent);
+        const isVsCodeBrowser = /code\//i.test(userAgent) || /electron\//i.test(userAgent);
+
+        function getInstallServiceUrl() {
+            if (window.location.port === '3000') {
+                return '/install-app';
+            }
+
+            return 'http://localhost:3000/install-app';
+        }
+
+        async function startEdgeInstall() {
+            const response = await fetch(getInstallServiceUrl(), { method: 'POST' });
+            const contentType = response.headers.get('content-type') || '';
+            const payload = contentType.includes('application/json')
+                ? await response.json()
+                : { ok: false, message: 'Install service is not available. Start the Node server and open http://localhost:3000/.' };
+
+            if (!response.ok || !payload.ok) {
+                throw new Error(payload.message || 'Install flow failed to start.');
+            }
+
+            return payload;
+        }
 
         function isStandaloneMode() {
             return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -52,6 +79,10 @@
 
         if (isStandaloneMode()) {
             setInstallUi(false, 'App is already installed on this device.');
+        } else if (isWindows) {
+            setInstallUi(true, isVsCodeBrowser
+                ? 'Tap Install App to open this page in Edge and install it there.'
+                : 'Tap Install App to install this game collection in Edge.');
         } else if (isIos) {
             setInstallUi(false, 'On iPhone or iPad, use Share and then Add to Home Screen.');
         } else {
@@ -65,6 +96,17 @@
         });
 
         installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt && isWindows) {
+                try {
+                    await startEdgeInstall();
+                    setInstallUi(true, 'Edge is opening. If the install window does not appear, use Edge\'s Install App option in the address bar menu.');
+                } catch (error) {
+                    setInstallUi(true, error.message || 'Could not start installation automatically. Open this site in Edge and install it there.');
+                    console.error('Install launcher failed:', error);
+                }
+                return;
+            }
+
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
@@ -104,7 +146,7 @@
                 <div class="card-icon">🏁</div>
                 <h3>Race (Finish Line)</h3>
                 <p>Run to the finish line while jumping over hazards.</p>
-                <a class="button" href="finis h-line/">Play</a>
+                <a class="button" href="finish-line/">Play</a>
             </article>
 
             <article class="card">
@@ -145,7 +187,7 @@
         </section>
 
         <footer class="site-footer">
-            <small>• Built by Musa • v.1.0.1526473</small>
+            <small>• Built by Musa • v.1.0.7281</small>
         </footer>
         <div style="text-align:center; margin: 32px 0;">
             <button id="rickroll-btn" style="padding:12px 28px; font-size:1.1rem; background:#fd79a8; color:white; border:none; border-radius:8px; cursor:pointer;">Click Me!</button>
