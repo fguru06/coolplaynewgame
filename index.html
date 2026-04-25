@@ -6,9 +6,11 @@
     <title>Musa's Games</title>
     <link rel="stylesheet" href="Styles.css" />
     <link rel="icon" href="data:,">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6c5ce7">
     <style>
         /* Small inline safety styles so page looks ok before external CSS loads */
-        body { margin:0; font-family:Verdana, Geneva, Tahoma, sans-serif; background:#f6f7fb; color:#111 }
+        
     </style>
 </head>
 <body>
@@ -18,9 +20,36 @@
     </header>
 
     <main class="home">
+            <button id="install-btn" style="display:none;margin:18px auto 0;display:block;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
         <section class="intro">
             <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
         </section>
+        <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js');
+            });
+        }
+        // PWA install prompt
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+        </script>
 
         <section class="grid">
             <article class="card">

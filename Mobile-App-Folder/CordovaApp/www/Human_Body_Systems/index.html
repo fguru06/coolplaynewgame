@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Body Systems</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>🧬 Interactive Human Body Systems 🧬</h1>
+
+  <div class="body-container">
+    <img src="https://portfolio.mediasurf.ca/assets/Hbody.166ab625.jpg" alt="Human Body Anatomy">
+
+    <button class="hotspot" id="hs-brain"
+      data-title="Brain"
+      data-desc="The brain tells your body what to do."
+      data-question="The brain is the control center of the body."
+      data-answer="true">+</button>
+
+    <button class="hotspot" id="hs-lungs"
+      data-title="Lungs"
+      data-desc="The lungs help you breathe in oxygen and breathe out carbon dioxide."
+      data-question="The lungs help you digest food."
+      data-answer="false">+</button>
+
+    <button class="hotspot" id="hs-left-arm"
+      data-title="Left Arm"
+      data-desc="Your arms help you grab and move things."
+      data-question="Your arms help you move and grab things."
+      data-answer="true">+</button>
+
+    <button class="hotspot" id="hs-right-arm"
+      data-title="Right Arm"
+      data-desc="Your arms help you grab and move things."
+      data-question="Your arms are used for breathing."
+      data-answer="false">+</button>
+
+    <button class="hotspot" id="hs-liver"
+      data-title="Liver"
+      data-desc="The liver cleans your blood and helps with digestion."
+      data-question="The liver helps clean your blood."
+      data-answer="true">+</button>
+
+    <button class="hotspot" id="hs-stomach"
+      data-title="Stomach"
+      data-desc="The stomach breaks down the food you eat."
+      data-question="The stomach breaks down food."
+      data-answer="true">+</button>
+
+    <button class="hotspot" id="hs-intestines"
+      data-title="Intestines"
+      data-desc="The intestines take nutrients from food your stomach has broken down."
+      data-question="The intestines pump blood around the body."
+      data-answer="false">+</button>
+
+    <button class="hotspot" id="hs-bladder"
+      data-title="Bladder"
+      data-desc="The bladder holds your pee until you go to the bathroom."
+      data-question="The bladder stores urine."
+      data-answer="true">+</button>
+
+    <button class="hotspot" id="hs-left-leg"
+      data-title="Left Leg"
+      data-desc="Your legs help you walk, run, and stand."
+      data-question="Your legs help you breathe."
+      data-answer="false">+</button>
+
+    <button class="hotspot" id="hs-right-leg"
+      data-title="Right Leg"
+      data-desc="Your legs help you walk, run, and stand."
+      data-question="Your legs help you walk and run."
+      data-answer="true">+</button>
+  </div>
+
+  <div class="check-btn-wrapper" id="check-btn-wrapper">
+    <button class="check-all-btn" id="check-all-btn">✅ Check All Answers</button>
+    <div class="progress-cover" id="progress-cover"></div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="quiz-modal">
+      <button class="close-btn" id="modal-close">&times;</button>
+      <div class="modal-icon">?</div>
+      <h2 id="modal-title"></h2>
+      <p class="description" id="modal-desc"></p>
+      <p class="question" id="modal-question"></p>
+      <div class="options">
+        <label><input type="radio" name="answer" value="true"> True</label>
+        <label><input type="radio" name="answer" value="false"> False</label>
+      </div>
+      <button class="submit-btn" id="modal-submit">Save Answer</button>
+      <p class="saved-msg" id="saved-msg">✔ Answer saved!</p>
+    </div>
+  </div>
+
+  <!-- Results Modal -->
+  <div class="modal-overlay" id="results-overlay">
+    <div class="modal" id="results-modal">
+      <button class="close-btn" id="results-close">&times;</button>
+      <div class="modal-icon">📊</div>
+      <h2>Your Results</h2>
+      <p class="result-score" id="result-score"></p>
+      <div class="results-chart" id="results-chart">
+        <div class="chart-bar">
+          <div class="bar-count" id="chart-correct-count">0</div>
+          <div class="bar correct-bar" id="chart-correct-bar" style="height:0"></div>
+          <div class="bar-label">Correct</div>
+        </div>
+        <div class="chart-bar">
+          <div class="bar-count" id="chart-incorrect-count">0</div>
+          <div class="bar incorrect-bar" id="chart-incorrect-bar" style="height:0"></div>
+          <div class="bar-label">Incorrect</div>
+        </div>
+      </div>
+      <div class="results-list" id="results-list"></div>
+      <button class="submit-btn" id="retry-btn">🔄 Try Again</button>
+      <button class="submit-btn download-btn" id="download-pdf-btn">📄 Download PDF Results</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

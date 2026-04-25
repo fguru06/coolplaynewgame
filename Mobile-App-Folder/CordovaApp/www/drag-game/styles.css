@@ -1,0 +1,88 @@
+canvas {
+    width: 100%;
+    max-width: 600px; /* or any max size you want */
+    border: 10px solid #000; /* solid border (no gradient) */
+    background-image: url(images/Coding_Canvas.png);
+    background-size: cover;
+    width: 90vw;
+    max-width: 90%;
+    height: auto;
+    aspect-ratio: 15 / 8.25;
+    display: block;
+    margin: 0 auto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: linear-gradient(135deg,#fdfbfb 0%,#ebedee 100%);
+}
+
+#image-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+button {
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+    background: linear-gradient(90deg,#FFE57F 0%,#FFB74D 100%);
+    border: none; /* Remove the border */
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition-duration: 0.4s;
+    min-width: 120px;
+    min-height: 40px;
+    flex: 1 1 120px;
+}
+
+button:hover {
+    background: linear-gradient(90deg,#FFB74D 0%,#FF8A65 100%);
+    color: white;
+    transform: translateY(-3px);
+}
+
+#mario-button {
+    background: linear-gradient(90deg,#ff5252 0%,#ff8a65 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#luigi-button {
+    background: linear-gradient(90deg,#66bb6a 0%,#2ecc71 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#peach-button {
+    background: linear-gradient(90deg,#ff9a9e 0%,#f6d365 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#restart-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    #image-selection {
+        flex-direction: column;
+        gap: 15px;
+    }
+    button {
+        font-size: 1em;
+        min-width: 80vw;
+        min-height: 40px;
+        padding: 12px 0;
+    }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Cookie Clicker</h1>
+        <!-- Firebase Auth UI -->
+        <div style="margin-bottom: 1em;">
+            <input type="email" id="emailInput" placeholder="Email">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="signUpBtn">Sign Up</button>
+            <button id="signInBtn">Sign In</button>
+            <button id="saveBtn">Save</button>
+            <span id="authStatus">Not signed in.</span>
+        </div>
+        <div class="cookie-area">
+            
+            <img id="cookie" src="Cookie.png" alt="Cookie">
+            <p style="font-size: 150%;">Upgrades:</p>
+            <div class="click-upgrades">
+                <button class="upgrade-btn" id="cursorUpgradeBtn">Buy Silver Finger (Cost: <span id="cursorUpgradeCost">100</span>)</button>
+                <span class="upgrade-count" id="cursorUpgradeCount">0</span> Silver Fingers
+                <br>
+                <button class="upgrade-btn" id="goldenFingerBtn">Buy Golden Clicker (Cost: <span id="goldenFingerCost">500</span>)</button>
+                <span class="upgrade-count" id="goldenFingerCount">0</span> Golden Clickers
+                <br>
+                <button class="upgrade-btn" id="cookieStormBtn">Buy Cookie Storm (Cost: <span id="cookieStormCost">2500</span>)</button>
+                <span class="upgrade-count" id="cookieStormCount">0</span> Cookie Storms
+            </div>
+        </div>
+        <div class="score">
+            Cookies: <span id="score">0</span>
+        </div>
+        <div class="upgrades">
+            <button class="upgrade-btn" id="autoClickerBtn">Buy Auto Clicker (Cost: <span id="autoClickerCost">15</span>)</button>
+            <span class="upgrade-count" id="autoClickerCount">0</span> Auto Clickers
+            <br>
+            <button class="upgrade-btn" id="grandmaBtn">Buy Grandma (Cost: <span id="grandmaCost">80</span>)</button>
+            <span class="upgrade-count" id="grandmaCount">0</span> Grandmas
+            <br>
+            <button class="upgrade-btn" id="factoryBtn">Buy Factory (Cost: <span id="factoryCost">400</span>)</button>
+            <span class="upgrade-count" id="factoryCount">0</span> Factories
+            <br>
+            <button class="upgrade-btn" id="mineBtn">Buy Mine (Cost: <span id="mineCost">2000</span>)</button>
+            <span class="upgrade-count" id="mineCount">0</span> Mines
+            <br>
+            <button class="upgrade-btn" id="bankBtn">Buy Bank (Cost: <span id="bankCost">10000</span>)</button>
+            <span class="upgrade-count" id="bankCount">0</span> Banks
+            <br>
+            <button class="upgrade-btn" id="portalBtn">Buy Portal (Cost: <span id="portalCost">50000</span>)</button>
+            <span class="upgrade-count" id="portalCount">0</span> Portals
+        </div>
+    </div>
+    <!-- Firebase and DOM issues fixed by moving script.js to the end of the body -->
+    <script src="script.js"></script>
+</body>
+</html>
