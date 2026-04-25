@@ -20,7 +20,8 @@
     </header>
 
     <main class="home">
-            <button id="install-btn" style="display:none;margin:18px auto 0;display:block;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
+            <button id="install-btn" style="display:none;margin:18px auto 0;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
+            <p id="install-status" style="margin:10px auto 0;max-width:520px;padding:0 18px;text-align:center;color:#2d3436;"></p>
         <section class="intro">
             <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
         </section>
@@ -28,26 +29,66 @@
         // Register service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js');
+                navigator.serviceWorker.register('service-worker.js').catch(function(error) {
+                    console.error('Service worker registration failed:', error);
+                });
             });
         }
+
         // PWA install prompt
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
+        const installStatus = document.getElementById('install-status');
+        const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+
+        function isStandaloneMode() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        }
+
+        function setInstallUi(showButton, message) {
+            installBtn.style.display = showButton ? 'block' : 'none';
+            installStatus.textContent = message || '';
+        }
+
+        if (isStandaloneMode()) {
+            setInstallUi(false, 'App is already installed on this device.');
+        } else if (isIos) {
+            setInstallUi(false, 'On iPhone or iPad, use Share and then Add to Home Screen.');
+        } else {
+            setInstallUi(false, 'Install becomes available automatically in a supported browser once the app is ready.');
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'block';
+            setInstallUi(true, 'Tap Install App to add this app to your device.');
         });
+
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
+                    setInstallUi(false, 'Installing app...');
+                } else {
+                    setInstallUi(true, 'Install was dismissed. You can try again.');
                 }
                 deferredPrompt = null;
+                return;
             }
+
+            if (isStandaloneMode()) {
+                setInstallUi(false, 'App is already installed on this device.');
+            } else if (isIos) {
+                setInstallUi(false, 'On iPhone or iPad, use Share and then Add to Home Screen.');
+            } else {
+                setInstallUi(false, 'Install is only available in supported browsers over HTTPS or localhost.');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            setInstallUi(false, 'App installed successfully.');
         });
         </script>
 

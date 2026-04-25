@@ -12,9 +12,8 @@
 }
 
 /* Page background gradient */
-body {
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-}
+body { margin:0; font-family:Verdana, Geneva, Tahoma, sans-serif; background:#f6f7fb; color:#111 }
+
 
 .button1 {
     font-size: large;
