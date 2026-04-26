@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checkers</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <main class="game-shell">
+        <section class="panel hero-panel">
+            <p class="eyebrow">Board Game</p>
+            <h1>Checkers</h1>
+            <p class="subtitle">Local two-player checkers with optional captures, king promotion, and simple pass-and-play turns.</p>
+            <div class="actions">
+                <button id="new-game" type="button">New Game</button>
+                <a class="home-link" href="../index.html">Home</a>
+            </div>
+        </section>
+
+        <section class="layout">
+            <aside class="panel sidebar">
+                <div class="status-block">
+                    <span class="label">Turn</span>
+                    <strong id="turn-label">Red</strong>
+                </div>
+                <div class="status-block">
+                    <span class="label">Status</span>
+                    <p id="status-message">Red moves first. Captures are optional.</p>
+                </div>
+                <div class="score-grid">
+                    <div class="score-card red-card">
+                        <span class="label">Red Pieces</span>
+                        <strong id="red-count">12</strong>
+                    </div>
+                    <div class="score-card black-card">
+                        <span class="label">Black Pieces</span>
+                        <strong id="black-count">12</strong>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div><span class="legend-piece red-piece"></span> Regular piece</div>
+                    <div><span class="legend-piece king-piece"></span> King</div>
+                    <div><span class="legend-swatch move-swatch"></span> Valid move</div>
+                    <div><span class="legend-swatch capture-swatch"></span> Capture move</div>
+                </div>
+            </aside>
+
+            <section class="board-wrap panel">
+                <div id="board" class="board" aria-label="Checkers board" role="grid"></div>
+            </section>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="app-shell">
+        <section class="hero-panel">
+            <div>
+                <p class="eyebrow">Classic Board Game</p>
+                <h1>Chess</h1>
+                <p class="hero-copy">Play a standard game of chess with legal move validation, castling, en passant, promotion, check, checkmate, and stalemate.</p>
+            </div>
+            <div class="hero-actions">
+                <button id="reset-btn" class="primary-btn" type="button">New Game</button>
+                <button id="undo-btn" class="secondary-btn" type="button">Undo Move</button>
+                <button class="secondary-btn" type="button" onclick="window.location.href='../index.html'">Home</button>
+            </div>
+        </section>
+
+        <section class="game-layout">
+            <div class="board-panel">
+                <div class="board-header">
+                    <div>
+                        <p class="meta-label">Turn</p>
+                        <h2 id="turn-indicator">White to move</h2>
+                    </div>
+                    <div class="status-pill" id="status-pill">Match in progress</div>
+                </div>
+
+                <div class="board-and-ranks">
+                    <div class="rank-labels" aria-hidden="true">
+                        <span>8</span>
+                        <span>7</span>
+                        <span>6</span>
+                        <span>5</span>
+                        <span>4</span>
+                        <span>3</span>
+                        <span>2</span>
+                        <span>1</span>
+                    </div>
+                    <div id="board" class="board" aria-label="Chess board" role="grid"></div>
+                </div>
+
+                <div class="file-labels" aria-hidden="true">
+                    <span>a</span>
+                    <span>b</span>
+                    <span>c</span>
+                    <span>d</span>
+                    <span>e</span>
+                    <span>f</span>
+                    <span>g</span>
+                    <span>h</span>
+                </div>
+
+                <p id="status-text" class="status-text">Select a piece to see its legal moves.</p>
+            </div>
+
+            <aside class="sidebar">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <h3>Captured by White</h3>
+                    </div>
+                    <div id="captured-white" class="captured-strip"></div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-heading">
+                        <h3>Captured by Black</h3>
+                    </div>
+                    <div id="captured-black" class="captured-strip"></div>
+                </section>
+
+                <section class="panel moves-panel">
+                    <div class="panel-heading">
+                        <h3>Move List</h3>
+                        <span id="move-count">0 moves</span>
+                    </div>
+                    <ol id="move-list" class="move-list"></ol>
+                </section>
+            </aside>
+        </section>
+    </main>
+
+    <div id="promotion-modal" class="promotion-modal hidden" aria-hidden="true">
+        <div class="promotion-card" role="dialog" aria-modal="true" aria-labelledby="promotion-title">
+            <h2 id="promotion-title">Choose Promotion</h2>
+            <p>Pick the piece for your pawn.</p>
+            <div id="promotion-options" class="promotion-options"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

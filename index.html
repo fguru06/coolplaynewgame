@@ -14,16 +14,14 @@
     </style>
 </head>
 <body>
-    <header class="site-header">
-    <!-- No header logo, branding will be in main area -->
-    
+    <header class="site-header"></header>
+
     <main class="home">
-        <div class="main-logo-area" style="text-align:center; margin: 0 0 18px 0;">
-            <object type="image/svg+xml" data="icon-512.svg" class="main-logo-svg" style="width:160px;max-width:90vw;height:auto;display:inline-block;"></object>
+        <div class="main-logo-area">
+            <object type="image/svg+xml" data="icon-512.svg" class="main-logo-svg"></object>
         </div>
-    <main class="home">
             <button id="install-btn" style="display:none;margin:18px auto 0;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
-            <p id="install-status" style="margin:10px auto 0;max-width:520px;padding:0 18px;text-align:center;color:#2d3436;"></p>
+            <p id="install-status"></p>
         <section class="intro">
             <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
         </section>
@@ -143,6 +141,13 @@
             </article>
 
             <article class="card">
+                <div class="card-icon">♟️</div>
+                <h3>Chess</h3>
+                <p>Play a full chess match with standard movement rules and checkmate.</p>
+                <a class="button" href="chess-game/index.html">Play</a>
+            </article>
+
+            <article class="card">
                 <div class="card-icon">🏁</div>
                 <h3>Race (Finish Line)</h3>
                 <p>Run to the finish line while jumping over hazards.</p>
@@ -154,6 +159,13 @@
                 <h3>Tic-Tac-Toe</h3>
                 <p>Classic Tic-Tac-Toe vs AI or a friend.</p>
                 <a class="button" href="tic-tac-toe-game/">Play</a>
+            </article>
+
+            <article class="card">
+                <div class="card-icon">🔴⚫</div>
+                <h3>Checkers</h3>
+                <p>Play local checkers with forced captures, king pieces, and multi-jump turns.</p>
+                <a class="button" href="checkers-game/">Play</a>
             </article>
 
             <article class="card">

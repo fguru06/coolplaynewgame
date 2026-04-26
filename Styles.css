@@ -78,76 +78,159 @@ body { margin:0; font-family:Verdana, Geneva, Tahoma, sans-serif; background:#f6
 /* Homepage styles */
 .site-header {
     padding: 22px 18px;
-    background: linear-gradient(90deg,#6c5ce7,#00b894);
+    background: linear-gradient(90deg,#4f8df7,#7ed6ff);
     color: white;
 }
 
-.site-brand {
+.home {
+    padding: 24px;
     max-width: 1100px;
     margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    text-align: left;
 }
 
-.site-logo {
-    width: 88px;
-    height: 88px;
-    object-fit: contain;
-    image-rendering: auto;
-    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.22));
+.main-logo-area {
+    text-align: center;
+    margin: 0 0 22px;
 }
 
-.site-brand-copy h1 {
-    margin: 0;
-    font-size: 1.9rem;
+.main-logo-svg {
+    width: 180px;
+    max-width: 90vw;
+    height: auto;
+    display: inline-block;
+    filter: drop-shadow(0 14px 24px rgba(79, 141, 247, 0.28));
 }
 
-.site-brand-copy p {
-    margin: 6px 0 0;
-    opacity: 0.95;
+.intro,
+#install-status,
+.section-sub,
+.site-footer,
+.card p,
+.projects-section p {
+    color: #1f4fbf;
 }
 
-.home { padding:24px; max-width:1100px; margin:0 auto }
-.intro { text-align:center; margin:18px 0 28px; color:#333 }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px }
-.card { background: linear-gradient(180deg,#ffffff 0%, #f8fafc 100%); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(15,15,30,0.06); text-align:center }
-.card-icon { font-size:42px; margin-bottom:8px }
-.card h3 { margin:8px 0 6px; font-size:1.1rem }
-.card p { margin:0 0 12px; color:#555; font-size:0.95rem }
-.card .button { display:inline-block; padding:10px 16px; border-radius:8px; background: linear-gradient(90deg,#00a8ff,#0066cc); color:white; border:0; text-decoration:none }
-.card .button:hover { background: linear-gradient(90deg,#0087d1,#0066cc) }
-.site-footer { margin:28px 0 60px; text-align:center; color:#666 }
+.intro,
+#install-status,
+.section-sub {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 760px;
+    background: linear-gradient(90deg, rgba(79, 141, 247, 0.14), rgba(126, 214, 255, 0.18));
+    border: 1px solid rgba(79, 141, 247, 0.22);
+    border-radius: 999px;
+    padding: 12px 18px;
+    box-shadow: 0 8px 20px rgba(79, 141, 247, 0.08);
+}
+
+.intro {
+    margin: 18px auto 28px;
+}
+
+#install-status {
+    margin: 10px auto 0;
+    min-height: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: linear-gradient(180deg, #ffffff 0%, #edf7ff 100%);
+    border-radius: 20px;
+    padding: 22px 18px;
+    border: 1px solid rgba(79, 141, 247, 0.16);
+    box-shadow: 0 14px 28px rgba(49, 105, 214, 0.10);
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.card h3,
+.section-heading {
+    color: #1450c8;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.card h3 {
+    margin: 8px 0 10px;
+    font-size: 1.14rem;
+}
+
+.card p {
+    margin: 0 0 14px;
+    font-size: 0.97rem;
+    line-height: 1.45;
+}
+
+.card .button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#4f8df7,#2e67d1);
+    color: white;
+    border: 0;
+    text-decoration: none;
+    box-shadow: 0 10px 18px rgba(46, 103, 209, 0.18);
+}
+
+.card .button:hover {
+    background: linear-gradient(90deg,#3b7aeb,#2359c0);
+}
+
+.site-footer {
+    margin: 28px 0 60px;
+    text-align: center;
+    font-weight: 600;
+}
 
 /* Projects section */
-.projects-section { margin-top:40px; padding-top:28px; border-top:2px dashed #ccc }
-.section-heading { text-align:center; font-size:1.5rem; margin:0 0 4px; color:#2d3436 }
-.section-sub { text-align:center; color:#636e72; margin:0 0 20px; font-size:0.95rem }
-.project-card { border:2px solid #00b89433; background:linear-gradient(180deg,#e8faf3 0%,#ffffff 100%) }
-.project-btn { background:linear-gradient(90deg,#00b894,#00cec9) !important }
-.project-btn:hover { background:linear-gradient(90deg,#00a381,#00b5b0) !important }
+.projects-section {
+    margin-top: 44px;
+    padding-top: 30px;
+    border-top: 2px dashed rgba(79, 141, 247, 0.22);
+}
+
+.section-heading {
+    text-align: center;
+    font-size: 1.55rem;
+    margin: 0 0 10px;
+}
+
+.section-sub {
+    margin: 0 auto 24px;
+    font-size: 0.98rem;
+}
+
+.project-card {
+    border: 1px solid rgba(79, 141, 247, 0.20);
+    background: linear-gradient(180deg,#eef8ff 0%,#ffffff 100%);
+}
+
+.project-btn {
+    background: linear-gradient(90deg,#5ba8ff,#43c4ff) !important;
+}
+
+.project-btn:hover {
+    background: linear-gradient(90deg,#4797f1,#31b4f0) !important;
+}
 
 @media (max-width: 640px) {
-    .site-brand {
-        flex-direction: column;
-    .main-logo-area {
-        margin-bottom: 18px;
-    }
-
     .main-logo-svg {
-        width: 160px;
-        max-width: 90vw;
-        height: auto;
-        display: inline-block;
-    }
-        text-align: center;
-        gap: 10px;
+        width: 150px;
     }
 
-    .site-logo {
-        width: 76px;
-        height: 76px;
+    .intro,
+    #install-status,
+    .section-sub {
+        border-radius: 22px;
+        padding: 12px 14px;
     }
 }
