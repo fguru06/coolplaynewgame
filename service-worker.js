@@ -1,4 +1,4 @@
-const CACHE_NAME = 'musa-games-v3';
+const CACHE_NAME = 'coolplay-games-v3';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
