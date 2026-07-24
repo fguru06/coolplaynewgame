@@ -2,32 +2,50 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0a1628, #1a237e, #0d47a1, #0a1628);
-  color: #fff;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(108, 45, 130, 0.25), transparent 55%),
+    radial-gradient(ellipse at 70% 60%, rgba(26, 58, 107, 0.30), transparent 50%),
+    linear-gradient(160deg, #06061a 0%, #0d1137 52%, #0a0e2e 100%);
+  color: #e0d8f8;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Stars */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(1px 1px at 8% 12%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 28% 48%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 52% 18%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 72% 42%, rgba(6,214,160,0.35), transparent),
+    radial-gradient(1.5px 1.5px at 90% 72%, rgba(224,64,251,0.3), transparent),
+    radial-gradient(2px 2px at 18% 80%, rgba(139,92,246,0.3), transparent);
+}
+
 h1 {
   text-align: center;
   padding: 20px;
   font-size: 2rem;
-  color: #4fc3f7;
+  color: #e040fb;
   text-transform: uppercase;
   letter-spacing: 3px;
+  position: relative; z-index: 1;
 }
 
 .body-container {
   position: relative;
   width: 600px;
   height: 640px;
-  background: #fff;
+  background: rgba(20, 18, 50, 0.7);
   border-radius: 16px;
   overflow: visible;
-  box-shadow: 0 0 40px rgba(79, 195, 247, 0.3);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
   margin-bottom: 20px;
+  position: relative; z-index: 1;
 }
 
 .body-container img {
@@ -43,8 +61,8 @@ h1 {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1565c0, #42a5f5);
-  border: 2.5px solid #90caf9;
+  background: linear-gradient(135deg, #8b5cf6, #e040fb);
+  border: 2.5px solid #c8b8f0;
   color: #fff;
   font-size: 22px;
   font-weight: bold;
@@ -54,15 +72,15 @@ h1 {
   justify-content: center;
   transition: all 0.3s ease;
   z-index: 10;
-  box-shadow: 0 2px 8px rgba(21, 101, 192, 0.4);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
   line-height: 1;
 }
 
 .hotspot:hover {
-  background: linear-gradient(135deg, #0d47a1, #1565c0);
+  background: linear-gradient(135deg, #7b4cf0, #c830e0);
   color: #fff;
   transform: scale(1.2);
-  box-shadow: 0 0 16px rgba(66, 165, 245, 0.7);
+  box-shadow: 0 0 16px rgba(224, 64, 251, 0.6);
 }
 
 .hotspot.active {
@@ -90,7 +108,7 @@ h1 {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 2px solid #42a5f5;
+  border: 2px solid #e040fb;
   animation: pulse 2s infinite;
 }
 
@@ -124,15 +142,16 @@ h1 {
 .modal-overlay.show { display: flex; }
 
 .modal {
-  background: #fff;
-  color: #222;
+  background: linear-gradient(180deg, rgba(20, 18, 55, 0.98), rgba(15, 12, 42, 0.98));
+  color: #e0d8f8;
   border-radius: 16px;
   width: 420px;
   padding: 32px 28px 28px;
   position: relative;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 40px rgba(10, 5, 30, 0.5), 0 0 30px rgba(139, 92, 246, 0.15);
   text-align: center;
   animation: fadeIn 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.25);
 }
 
 @keyframes fadeIn {
@@ -144,14 +163,14 @@ h1 {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 3px solid #1565c0;
+  border: 3px solid #e040fb;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 16px;
   font-size: 28px;
-  color: #1565c0;
-  background: #e8f0fe;
+  color: #e040fb;
+  background: rgba(139, 92, 246, 0.12);
 }
 
 .modal .close-btn {
@@ -161,20 +180,20 @@ h1 {
   background: none;
   border: none;
   font-size: 22px;
-  color: #999;
+  color: #888;
   cursor: pointer;
 }
-.modal .close-btn:hover { color: #333; }
+.modal .close-btn:hover { color: #e040fb; }
 
 .modal h2 {
   font-size: 1.3rem;
   margin-bottom: 10px;
-  color: #111;
+  color: #e8e0ff;
 }
 
 .modal .description {
   font-size: 0.92rem;
-  color: #555;
+  color: #a098c8;
   margin-bottom: 18px;
   line-height: 1.5;
 }

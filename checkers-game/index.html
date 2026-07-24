@@ -13,6 +13,11 @@
             <h1>Checkers</h1>
             <p class="subtitle">Local two-player checkers with optional captures, king promotion, and simple pass-and-play turns.</p>
             <div class="actions">
+                <div id="opponent-select" style="display:flex; gap:8px; align-items:center;">
+                    <span style="font-size:0.9rem;color:var(--muted);">Opponent:</span>
+                    <button id="mode-friend" type="button" style="padding:8px 14px;">Friend</button>
+                    <button id="mode-cpu" type="button" style="padding:8px 14px;">CPU</button>
+                </div>
                 <button id="new-game" type="button">New Game</button>
                 <a class="home-link" href="../index.html">Home</a>
             </div>

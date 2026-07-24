@@ -15,6 +15,11 @@
                 <p class="hero-copy">Play a standard game of chess with legal move validation, castling, en passant, promotion, check, checkmate, and stalemate.</p>
             </div>
             <div class="hero-actions">
+                <div id="opponent-select" style="display:flex; gap:8px; align-items:center;">
+                    <span style="font-size:0.9rem;color:var(--muted);">Opponent:</span>
+                    <button id="mode-friend" class="secondary-btn" type="button" style="padding:8px 14px;">Friend</button>
+                    <button id="mode-cpu" class="secondary-btn" type="button" style="padding:8px 14px;">CPU</button>
+                </div>
                 <button id="reset-btn" class="primary-btn" type="button">New Game</button>
                 <button id="undo-btn" class="secondary-btn" type="button">Undo Move</button>
                 <button class="secondary-btn" type="button" onclick="window.location.href='../index.html'">Home</button>

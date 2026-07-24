@@ -49,6 +49,28 @@ let state = createInitialState();
 elements.resetBtn.addEventListener("click", resetGame);
 elements.undoBtn.addEventListener("click", undoMove);
 
+// CPU opponent mode (null = not chosen, false = friend, true = CPU plays as black)
+let isCPU = null;
+const modeFriendBtn = document.getElementById("mode-friend");
+const modeCpuBtn = document.getElementById("mode-cpu");
+if (modeFriendBtn && modeCpuBtn) {
+    modeFriendBtn.addEventListener("click", () => setMode(false));
+    modeCpuBtn.addEventListener("click", () => setMode(true));
+}
+function setMode(cpu) {
+    isCPU = cpu;
+    if (isCPU) {
+        modeFriendBtn.style.opacity = "0.65";
+        modeCpuBtn.style.opacity = "1";
+    } else {
+        modeFriendBtn.style.opacity = "1";
+        modeCpuBtn.style.opacity = "0.65";
+    }
+    resetGame();
+    const sel = document.getElementById("opponent-select");
+    if (sel) sel.style.display = "none";
+}
+
 render();
 
 function createInitialState() {
@@ -154,7 +176,11 @@ function renderStatus() {
     const playerName = capitalize(state.currentPlayer);
     elements.turnIndicator.textContent = state.result ? state.result.title : `${playerName} to move`;
     elements.statusPill.textContent = state.result ? state.result.pill : getStatusPillText();
-    elements.statusText.textContent = state.message;
+    if (isCPU === null && !state.result) {
+        elements.statusText.textContent = "Choose opponent: Friend or CPU";
+    } else {
+        elements.statusText.textContent = state.message;
+    }
     elements.undoBtn.disabled = undoStack.length === 0 || Boolean(state.pendingPromotion);
 }
 
@@ -227,6 +253,16 @@ function renderPromotionChoices() {
 }
 
 function handleSquareClick(row, col) {
+    // Don't allow moves until opponent is chosen
+    if (isCPU === null) {
+        state.message = "Choose opponent: Friend or CPU";
+        render();
+        return;
+    }
+    // If CPU mode and it's black's turn, ignore human clicks
+    if (isCPU && state.currentPlayer === "black") {
+        return;
+    }
     if (state.pendingPromotion || state.result) {
         return;
     }
@@ -333,7 +369,37 @@ function finalizeTurn(notation) {
         state.message = `It is ${capitalize(state.currentPlayer)}'s turn.`;
     }
 
+    // If CPU mode and now it's black's turn, trigger CPU move
+    if (isCPU && state.currentPlayer === "black" && !state.result && !state.pendingPromotion) {
+        setTimeout(() => {
+            makeCpuMove();
+        }, 500);
+    }
+
     render();
+}
+
+function makeCpuMove() {
+    if (!isCPU || state.currentPlayer !== "black" || state.result || state.pendingPromotion) return;
+
+    const allMoves = getAllLegalMoves(state, "black");
+    if (allMoves.length === 0) return;
+
+    // Pick a random legal move
+    const randomMove = allMoves[Math.floor(Math.random() * allMoves.length)];
+
+    // Simulate selection
+    state.selected = { row: randomMove.fromRow, col: randomMove.fromCol };
+    state.legalMoves = getLegalMovesForPiece(state, randomMove.fromRow, randomMove.fromCol);
+    state.message = "CPU is thinking...";
+
+    // Commit the move
+    const moveToCommit = state.legalMoves.find(
+        (m) => m.toRow === randomMove.toRow && m.toCol === randomMove.toCol
+    );
+    if (moveToCommit) {
+        commitMove(moveToCommit);
+    }
 }
 
 function getStatusPillText() {

@@ -16,6 +16,28 @@ let selectedPiece = null;
 let validMoves = [];
 let winner = null;
 
+// CPU opponent mode (null = not chosen, false = friend, true = CPU plays as black)
+let isCPU = null;
+const modeFriendBtn = document.getElementById("mode-friend");
+const modeCpuBtn = document.getElementById("mode-cpu");
+if (modeFriendBtn && modeCpuBtn) {
+    modeFriendBtn.addEventListener("click", () => setMode(false));
+    modeCpuBtn.addEventListener("click", () => setMode(true));
+}
+function setMode(cpu) {
+    isCPU = cpu;
+    if (isCPU) {
+        modeFriendBtn.style.opacity = "0.65";
+        modeCpuBtn.style.opacity = "1";
+    } else {
+        modeFriendBtn.style.opacity = "1";
+        modeCpuBtn.style.opacity = "0.65";
+    }
+    resetGame();
+    const sel = document.getElementById("opponent-select");
+    if (sel) sel.style.display = "none";
+}
+
 function createInitialBoard() {
     return Array.from({ length: BOARD_SIZE }, (_, row) => {
         return Array.from({ length: BOARD_SIZE }, (_, col) => {
@@ -42,7 +64,11 @@ function resetGame() {
     selectedPiece = null;
     validMoves = [];
     winner = null;
-    statusMessage.textContent = "Red moves first. Captures are optional.";
+    if (isCPU === null) {
+        statusMessage.textContent = "Choose opponent: Friend or CPU";
+    } else {
+        statusMessage.textContent = "Red moves first. Captures are optional.";
+    }
     render();
 }
 
@@ -189,6 +215,29 @@ function switchPlayer() {
     validMoves = [];
 }
 
+function makeCpuMove() {
+    if (!isCPU || currentPlayer !== "black" || winner) return;
+
+    const allMoves = getAllMovesForPlayer("black");
+    if (allMoves.length === 0) return;
+
+    // Prefer capture moves if available
+    const captures = allMoves.filter(m => m.capture);
+    const chosenMoves = captures.length > 0 ? captures : allMoves;
+    const cpuMove = chosenMoves[Math.floor(Math.random() * chosenMoves.length)];
+
+    // Simulate selection
+    selectedPiece = { row: cpuMove.from.row, col: cpuMove.from.col };
+    validMoves = getValidMovesForSelection(cpuMove.from.row, cpuMove.from.col);
+    statusMessage.textContent = "CPU is thinking...";
+    render();
+
+    // Commit the move after a short delay
+    setTimeout(() => {
+        movePiece(cpuMove);
+    }, 300);
+}
+
 function updateGameStateAfterMove(movedToRow, movedToCol, wasCapture, wasPromoted) {
     const counts = countPieces();
 
@@ -239,9 +288,25 @@ function movePiece(targetMove) {
     const wasPromoted = maybePromote(piece, targetMove.row);
     updateGameStateAfterMove(targetMove.row, targetMove.col, Boolean(targetMove.capture), wasPromoted);
     render();
+
+    // If CPU mode and now it's black's turn, trigger CPU move
+    if (isCPU && currentPlayer === "black" && !winner) {
+        setTimeout(() => {
+            makeCpuMove();
+        }, 500);
+    }
 }
 
 function handleCellClick(row, col) {
+    // Don't allow moves until opponent is chosen
+    if (isCPU === null) {
+        statusMessage.textContent = "Choose opponent: Friend or CPU";
+        return;
+    }
+    // If CPU mode and it's black's turn, ignore human clicks
+    if (isCPU && currentPlayer === "black") {
+        return;
+    }
     if (winner) {
         return;
     }

@@ -1,18 +1,44 @@
+/* ═══════════════════════════════════════════
+   GALAXY THEME — Cookie Clicker
+   ═══════════════════════════════════════════ */
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f7e9d2;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(108, 45, 130, 0.25), transparent 55%),
+        radial-gradient(ellipse at 70% 60%, rgba(26, 58, 107, 0.25), transparent 50%),
+        linear-gradient(160deg, #06061a 0%, #0d1137 52%, #0a0e2e 100%);
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    color: #e0d8f8;
 }
+
+/* Stars */
+body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 40% 25%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 65% 50%, rgba(6,214,160,0.3), transparent),
+        radial-gradient(1.5px 1.5px at 85% 70%, rgba(224,64,251,0.25), transparent),
+        radial-gradient(1px 1px at 30% 80%, rgba(139,92,246,0.3), transparent);
+}
+
 .container {
-    max-width: 400px;
+    max-width: 420px;
     margin: 40px auto;
-    background: #fffbe7;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: rgba(15, 15, 50, 0.82);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(10, 5, 30, 0.40), 0 0 30px rgba(139, 92, 246, 0.08);
     padding: 32px 24px 24px 24px;
     text-align: center;
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    backdrop-filter: blur(12px);
+    position: relative; z-index: 1;
 }
+
 .cookie-area {
     margin: 24px 0;
 }
@@ -21,6 +47,7 @@ body {
     height: 180px;
     cursor: pointer;
     transition: transform 0.1s;
+    filter: drop-shadow(0 0 20px rgba(255, 209, 102, 0.35));
 }
 #cookie:active {
     transform: scale(0.95);
@@ -28,29 +55,37 @@ body {
 .score {
     font-size: 1.3em;
     margin-bottom: 18px;
+    color: #e8e0ff;
 }
 .upgrades, .click-upgrades {
     margin-top: 18px;
     margin-bottom: 10px;
 }
 .upgrade-btn {
-    background: #e0a96d;
+    background: linear-gradient(90deg, #8b5cf6, #6d28d9);
     color: #fff;
     border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
+    border-radius: 8px;
+    padding: 10px 18px;
     font-size: 1em;
     cursor: pointer;
     margin: 6px 0 2px 0;
-    transition: background 0.2s;
+    transition: all 0.25s;
     min-width: 220px;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+.upgrade-btn:hover {
+    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35);
+    transform: translateY(-1px);
 }
 .upgrade-btn:disabled {
-    background: #bdbdbd;
+    background: rgba(60, 55, 100, 0.5);
     cursor: not-allowed;
+    box-shadow: none;
+    color: #666;
 }
 .upgrade-count {
     font-weight: bold;
-    color: #a86b32;
+    color: #ffd166;
     margin-left: 6px;
 }
