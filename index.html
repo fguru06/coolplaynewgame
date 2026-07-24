@@ -37,13 +37,39 @@
         <script>
         const offlineSync = window.CoolplayOffline;
 
-        // Register service worker
+        // Register service worker — force update to latest
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    // Unregister ALL old workers immediately
+                    return Promise.all(regs.map(function(r) { return r.unregister(); }));
+                }).then(function() {
+                    // Register fresh
+                    return navigator.serviceWorker.register('service-worker.js');
+                }).then(function(registration) {
+                    console.log('[app] SW registered, scope=' + registration.scope);
+                    // If there's a waiting worker, skip waiting and reload
+                    if (registration.waiting) {
+                        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                    registration.addEventListener('updatefound', function() {
+                        var newWorker = registration.installing;
+                        if (!newWorker) return;
+                        newWorker.addEventListener('statechange', function() {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('[app] new SW installed, reloading...');
+                                window.location.reload();
+                            }
+                        });
+                    });
                     if (offlineSync) {
                         offlineSync.setServiceWorkerRegistration(registration);
                     }
+                    // Listen for controller change
+                    navigator.serviceWorker.addEventListener('controllerchange', function() {
+                        console.log('[app] SW controller changed, reloading');
+                        window.location.reload();
+                    });
                 }).catch(function(error) {
                     console.error('Service worker registration failed:', error);
                 });
