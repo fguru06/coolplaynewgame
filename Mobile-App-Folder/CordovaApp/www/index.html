@@ -37,6 +37,16 @@
         <title>Hello World</title>
     </head>
     <body>
+        <div class="startup-screen" aria-hidden="true">
+            <div class="startup-screen__glow"></div>
+            <div class="startup-screen__panel">
+                <div class="startup-screen__label">Coolplay Mobile</div>
+                <div class="startup-screen__core"></div>
+                <h2>Launching your arcade</h2>
+                <p>Booting the game hub and preparing a smooth app experience.</p>
+                <div class="startup-screen__bar"><span></span></div>
+            </div>
+        </div>
         <div class="app">
             <h1>Games App</h1>
             <div id="main-menu">
@@ -56,6 +66,23 @@
         </div>
         <script src="cordova.js"></script>
         <script>
+        document.body.classList.add('is-loading');
+
+        function finishEntrance() {
+            document.body.classList.add('is-ready');
+            window.setTimeout(function () {
+                document.body.classList.remove('is-loading');
+            }, 900);
+        }
+
+        if (document.readyState === 'complete') {
+            window.setTimeout(finishEntrance, 250);
+        } else {
+            window.addEventListener('load', function () {
+                window.setTimeout(finishEntrance, 250);
+            }, { once: true });
+        }
+
         function openGame(game) {
             var gameMap = {
                 'cookie-clicker': 'cookie-clicker/index.html',

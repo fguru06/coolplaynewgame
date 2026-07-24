@@ -186,6 +186,7 @@ h1 {
 .board {
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(8, minmax(0, 1fr));
     width: min(100%, 720px);
     aspect-ratio: 1;
     border: 12px solid var(--board-outline);
@@ -199,6 +200,9 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
     border: none;
     padding: 0;
     cursor: pointer;

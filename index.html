@@ -20,16 +20,31 @@
         <div class="main-logo-area">
             <object type="image/svg+xml" data="icon-512.svg" class="main-logo-svg"></object>
         </div>
+            <div id="network-banner" class="network-banner network-banner--hidden" aria-live="polite">
+                <span id="network-banner-text">Checking connection...</span>
+                <span id="network-banner-badge" class="network-banner__badge" hidden>0 queued actions</span>
+            </div>
+            <section class="sync-panel" aria-live="polite">
+                <p id="sync-state-text" class="sync-panel__title">Checking connection...</p>
+                <p id="app-state-text" class="sync-panel__meta">Loading the latest app snapshot...</p>
+            </section>
             <button id="install-btn" style="display:none;margin:18px auto 0;padding:10px 24px;font-size:1rem;background:#00b894;color:#fff;border:none;border-radius:6px;cursor:pointer;">Install App</button>
             <p id="install-status"></p>
         <section class="intro">
             <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
         </section>
+        <script src="offline-sync.js"></script>
         <script>
+        const offlineSync = window.CoolplayOffline;
+
         // Register service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js').catch(function(error) {
+                navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+                    if (offlineSync) {
+                        offlineSync.setServiceWorkerRegistration(registration);
+                    }
+                }).catch(function(error) {
                     console.error('Service worker registration failed:', error);
                 });
             });
@@ -39,6 +54,7 @@
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
         const installStatus = document.getElementById('install-status');
+        const appStateText = document.getElementById('app-state-text');
         const userAgent = window.navigator.userAgent;
         const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
         const isWindows = /windows/i.test(userAgent);
@@ -53,17 +69,49 @@
         }
 
         async function startEdgeInstall() {
-            const response = await fetch(getInstallServiceUrl(), { method: 'POST' });
-            const contentType = response.headers.get('content-type') || '';
-            const payload = contentType.includes('application/json')
-                ? await response.json()
-                : { ok: false, message: 'Install service is not available. Start the Node server and open http://localhost:3000/.' };
-
-            if (!response.ok || !payload.ok) {
-                throw new Error(payload.message || 'Install flow failed to start.');
+            if (!offlineSync) {
+                throw new Error('Offline support did not load correctly.');
             }
 
-            return payload;
+            const result = await offlineSync.sendQueuedMutation({
+                url: getInstallServiceUrl(),
+                method: 'POST',
+                description: 'Install app request',
+                queuedMessage: 'Install request saved offline. It will retry automatically when the connection returns.'
+            });
+
+            if (result.queued) {
+                return {
+                    ok: true,
+                    queued: true,
+                    message: result.message
+                };
+            }
+
+            return result.data || { ok: true, message: 'Install flow started.' };
+        }
+
+        async function loadAppState() {
+            if (!offlineSync || !appStateText) {
+                return;
+            }
+
+            try {
+                const result = await offlineSync.cachedFetchJson('/api/app-state');
+                const sourceLabel = result.source === 'cache' ? 'Cached offline snapshot' : 'Live snapshot';
+                const refreshedAt = new Date(result.cachedAt || result.data.generatedAt).toLocaleTimeString([], {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+                const installAvailability = result.data.installServiceAvailable
+                    ? 'Install service available on this machine.'
+                    : 'Install service unavailable until the Node server can reach Microsoft Edge.';
+
+                const message = sourceLabel + ': ' + result.data.experienceCount + ' playable pages and ' + result.data.offlineAssetCount + ' cached assets ready. Refreshed at ' + refreshedAt + '. ' + installAvailability;
+                offlineSync.setAppStateText(message);
+            } catch (error) {
+                offlineSync.setAppStateText('Open the app online once to seed its local data cache.');
+            }
         }
 
         function isStandaloneMode() {
@@ -130,6 +178,25 @@
             deferredPrompt = null;
             setInstallUi(false, 'App installed successfully.');
         });
+
+        loadAppState();
+
+        document.body.classList.add('is-loading');
+
+        function finishEntrance() {
+            document.body.classList.add('is-ready');
+            window.setTimeout(() => {
+                document.body.classList.remove('is-loading');
+            }, 900);
+        }
+
+        if (document.readyState === 'complete') {
+            window.setTimeout(finishEntrance, 250);
+        } else {
+            window.addEventListener('load', () => {
+                window.setTimeout(finishEntrance, 250);
+            }, { once: true });
+        }
         </script>
 
         <section class="grid">
