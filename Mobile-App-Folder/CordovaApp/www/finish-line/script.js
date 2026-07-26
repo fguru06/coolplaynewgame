@@ -7,9 +7,9 @@ var isLuigi = false;
 var isPeach = false; // Add flag for Peach
 var useDPad = false;
 var myObstacleImage = new Image();
-myObstacleImage.src = "images/Obstacle.png";
+myObstacleImage.src = "images/Spike.webp";
 var finishLineImage = new Image();
-finishLineImage.src = "images/Finish-Line.png"; // Ensure this path is correct
+finishLineImage.src = "images/Trophy.webp";
 var gravity = 0.05; // Add gravity
 var onGround = false; // Add flag to check if character is on the ground
 
@@ -44,16 +44,12 @@ function startGame(imageSrc) {
 		} else {
 			myGamePiece = new component(70, 100, myImage, 10, 720);
 		}
-		myFinishLine = new component(20, 825, finishLineImage, 1480, 0, "finish"); // Use finish line image
-		myObstacles.push(new component(10, 100, myObstacleImage, 100, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 250, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 400, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 550, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 700, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 850, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 1000, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 1150, 750));
-		myObstacles.push(new component(10, 100, myObstacleImage, 1300, 750));
+		myFinishLine = new component(70, 100, finishLineImage, 1450, 690, "finish"); // Use finish line image
+		myObstacles.push(new component(60, 70, myObstacleImage, 200, 750));
+		myObstacles.push(new component(60, 70, myObstacleImage, 450, 750));
+		myObstacles.push(new component(60, 70, myObstacleImage, 700, 750));
+		myObstacles.push(new component(60, 70, myObstacleImage, 950, 750));
+		myObstacles.push(new component(60, 70, myObstacleImage, 1200, 750));
 		gameOver = false;
 	};
 }
@@ -207,10 +203,7 @@ function updateGameArea() {
 				loseAudio.currentTime = 0;
 				loseAudio.volume = 1;
 				loseAudio.muted = false;
-				loseAudio.play().catch(function(e) {
-					alert("Click OK to play the losing sound!");
-					loseAudio.play();
-				});
+				loseAudio.play().catch(function() {});
 			}
 			setTimeout(function () {
 				var gameOverImage = new Image();
@@ -245,17 +238,14 @@ function updateGameArea() {
 		myObstacles = [];
 		myGameArea.clear();
 		removeDPad();
-		myGameArea.canvas.style.backgroundImage = "url('images/Congrats.png')";
+		myGameArea.canvas.style.backgroundImage = "url('images/Trophy.webp')";
         // Play win sound
         var winAudio = document.getElementById("win-audio");
         if (winAudio) {
             winAudio.currentTime = 0;
             winAudio.volume = 1;
             winAudio.muted = false;
-            winAudio.play().catch(function(e) {
-                alert("Click OK to play the win sound!");
-                winAudio.play();
-            });
+            winAudio.play().catch(function() {});
         }
 		// Show the restart button
 		if (!document.getElementById("restart-button")) {
@@ -266,14 +256,10 @@ function updateGameArea() {
 
 class RestartButton {
 	constructor(x, y, width, height, text) {
-		this.width = width;
-		this.height = height;
-		this.text = text;
 		this.element = document.createElement("button");
 		this.element.id = "restart-button";
-		this.element.style.width = this.width + "px";
-		this.element.style.height = this.height + "px";
-		this.element.innerHTML = this.text;
+		this.element.textContent = text;
+		this.element.style.cssText = "background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1.4em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.3);margin-top:16px;";
 		document
 			.getElementById("restart-button-container")
 			.appendChild(this.element);
@@ -294,12 +280,12 @@ function showControlChoiceModal(callback) {
 		if (document.getElementById('control-choice-modal')) return;
 		const modal = document.createElement('div');
 		modal.id = 'control-choice-modal';
-		modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000;';
+		modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;';
 		modal.innerHTML = `
-			<div style="background:#fff;padding:32px 24px;border-radius:16px;box-shadow:0 4px 32px #0008;text-align:center;max-width:90vw;">
-				<h2 style='margin-bottom:18px;'>How do you want to move?</h2>
-				<button id="choose-dpad" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Show Arrow Buttons</button>
-				<button id="choose-keys" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Use Keyboard Arrows</button>
+			<div style="background:linear-gradient(160deg,#0d1137,#06061a);padding:32px 24px;border-radius:16px;box-shadow:0 0 40px rgba(139,92,246,0.3);text-align:center;max-width:90vw;border:1px solid rgba(139,92,246,0.3);">
+				<h2 style='margin-bottom:18px;color:#e0d8f8;font-size:1.8em;'>Controls</h2>
+				<button id="choose-dpad" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Show Arrow Buttons</button>
+				<button id="choose-keys" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Use Keyboard Arrows</button>
 			</div>
 		`;
 		document.body.appendChild(modal);
@@ -318,12 +304,14 @@ function createDPad() {
 		const dpad = document.createElement('div');
 		dpad.id = 'dpad-container';
 		dpad.innerHTML = `
-			<div style="display:flex;flex-direction:column;align-items:center;position:fixed;bottom:30px;left:30px;z-index:1000;">
-				<button class="dpad-btn" id="dpad-up">▲</button>
-				<div style="display:flex;flex-direction:row;">
-					<button class="dpad-btn" id="dpad-left">◀</button>
-					<button class="dpad-btn" id="dpad-down">▼</button>
-					<button class="dpad-btn" id="dpad-right">▶</button>
+			<div style="display:flex;flex-direction:column;align-items:center;position:fixed;bottom:30px;left:0;right:0;z-index:1000;pointer-events:none;">
+				<div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%;padding:0 30px;">
+					<div style="display:flex;gap:8px;pointer-events:auto;">
+						<button class="dpad-btn" id="dpad-left">&#9668;</button>
+						<button class="dpad-btn" id="dpad-right">&#9658;</button>
+					</div>
+					<button id="dpad-home" style="pointer-events:auto;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1.2em;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Home</button>
+					<button id="dpad-jump" style="pointer-events:auto;width:130px;height:130px;min-width:130px;max-width:130px;padding:0;font-size:4em;line-height:130px;text-align:center;border-radius:50%;border:none;flex-shrink:0;flex-grow:0;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(239,68,68,0.4);">&#9650;</button>
 				</div>
 			</div>
 		`;
@@ -331,11 +319,19 @@ function createDPad() {
 		const style = document.createElement('style');
 		style.textContent = `
 			.dpad-btn {
-				width: 48px; height: 48px; margin: 4px; font-size: 2em; border-radius: 12px; border: 2px solid #333; background: #eee; color: #222; box-shadow: 1px 1px 4px #aaa; }
-			.dpad-btn:active { background: #ccc; }
+				width: 48px; height: 48px; margin: 0; font-size: 2em; border-radius: 12px; border: none; background: linear-gradient(135deg,#ef4444,#dc2626); color: #fff; box-shadow: 0 4px 15px rgba(239,68,68,0.4); }
+			.dpad-btn:active { background: #c82333; }
 		`;
 		document.head.appendChild(style);
-		const keyMap = { 'dpad-up': 38, 'dpad-down': 40, 'dpad-left': 37, 'dpad-right': 39 };
+		document.getElementById('dpad-home').onclick = function() {
+			window.location.href = '../index.html';
+		};
+		document.getElementById('dpad-jump').addEventListener('touchstart', e => { e.preventDefault(); simulateKey(38, true); });
+		document.getElementById('dpad-jump').addEventListener('touchend', e => { e.preventDefault(); simulateKey(38, false); });
+		document.getElementById('dpad-jump').addEventListener('mousedown', e => { e.preventDefault(); simulateKey(38, true); });
+		document.getElementById('dpad-jump').addEventListener('mouseup', e => { e.preventDefault(); simulateKey(38, false); });
+		document.getElementById('dpad-jump').addEventListener('mouseleave', e => { e.preventDefault(); simulateKey(38, false); });
+		const keyMap = { 'dpad-left': 37, 'dpad-right': 39 };
 		Object.keys(keyMap).forEach(id => {
 			const btn = document.getElementById(id);
 			btn.addEventListener('touchstart', e => { e.preventDefault(); simulateKey(keyMap[id], true); });

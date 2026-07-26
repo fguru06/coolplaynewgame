@@ -19,33 +19,17 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 // --- Auth UI Elements ---
-const emailInput = document.getElementById('emailInput');
-const passwordInput = document.getElementById('passwordInput');
-const signUpBtn = document.getElementById('signUpBtn');
-const signInBtn = document.getElementById('signInBtn');
+const googleSignInBtn = document.getElementById('googleSignInBtn');
 const authStatus = document.getElementById('authStatus');
 
-signUpBtn.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      authStatus.textContent = 'Signed up as: ' + userCredential.user.email;
+googleSignInBtn.addEventListener('click', () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      authStatus.textContent = 'Signed in as: ' + result.user.displayName;
     })
     .catch((error) => {
-      authStatus.textContent = error.message;
-    });
-});
-
-signInBtn.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      authStatus.textContent = 'Signed in as: ' + userCredential.user.email;
-    })
-    .catch((error) => {
-      authStatus.textContent = error.message;
+      authStatus.textContent = 'Sign in unavailable in this browser.';
     });
 });
 
@@ -53,9 +37,12 @@ auth.onAuthStateChanged((user) => {
   if (user) {
     authStatus.textContent = 'Signed in as: ' + user.email;
   } else {
-    authStatus.textContent = 'Not signed in.';
+    authStatus.textContent = '';
   }
 });
+
+// Hide auth status text on page load since Firebase needs a web server
+authStatus.textContent = '';
 
 let score = 0;
 let autoClickers = 0;

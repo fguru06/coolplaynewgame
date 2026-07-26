@@ -6,11 +6,14 @@ var myObstacles = [];
 var myImage = new Image();
 myImage.src = "images/Mario_Jump.png";
 var myObstacleImage = new Image();
-myObstacleImage.src = "images/Obstacle.png";
+myObstacleImage.src = "images/Goomba.png";
+var myFollowerImage = new Image();
+myFollowerImage.src = "images/OIP.webp";
 var coins = [];
 var coinsImage = new Image();
 coinsImage.src = "images/Coin.png";
 var score = 0;
+var highScore = parseInt(localStorage.getItem('coinsChaosBest')) || 0;
 var gameOver = false;
 var isLuigi = false;
 var isPeach = false;
@@ -45,19 +48,19 @@ function startGame(imageSrc) {
 	} else {
 		myGamePiece = new component(70, 100, myImage, 10, 720);
 	}
-	myObstacles.push(new component(10, 100, null, -100, 1, true));
-	myObstacles.push(new component(10, 100, myObstacleImage, 100, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 300, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 500, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 700, 1));
-// useDPad already declared at the top
-	myObstacles.push(new component(10, 100, myObstacleImage, 1100, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 1300, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 1500, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 1700, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 1900, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 2100, 1));
-	myObstacles.push(new component(10, 100, myObstacleImage, 2300, 1));
+	// Follower (red goomba that chases the player)
+	var follower = new component(80, 100, myFollowerImage, -100, 1);
+	follower.isFollower = true;
+	myObstacles.push(follower);
+	// Goomba obstacles
+	var goombaPositions = [
+		[100, 100], [300, 250], [500, 400], [700, 150],
+		[1100, 300], [1300, 500], [1500, 200], [1700, 450],
+		[1900, 100], [2100, 350], [2300, 500]
+	];
+	for (var g = 0; g < goombaPositions.length; g++) {
+		myObstacles.push(new component(80, 100, myObstacleImage, goombaPositions[g][0], goombaPositions[g][1]));
+	}
 	score = 0;
 	gameOver = false;
 
@@ -115,12 +118,7 @@ function component(width, height, image, x, y, isFollower = false) {
 	this.speedX = 1;
 	this.update = function () {
 		ctx = myGameArea.context;
-		if (this.isFollower) {
-			ctx.fillStyle = "red";
-			ctx.fillRect(this.x, this.y, this.width, this.height);
-		} else {
-			ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-		}
+		ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 	};
 	this.newPos = function () {
 		if (myGameArea.keys && myGameArea.keys[37]) {
@@ -159,19 +157,13 @@ function component(width, height, image, x, y, isFollower = false) {
 	};
 	this.moveVertically = function () {
 		this.y += this.speedY;
-		if (
-			this.y <= -100 ||
-			this.y >= myGameArea.canvas.height - this.height + 100
-		) {
+		if (this.y <= 0 || this.y >= myGameArea.canvas.height - this.height) {
 			this.speedY = -this.speedY;
 		}
 	};
 	this.moveHorizontally = function () {
 		this.x += this.speedX;
-		if (
-			this.x <= -100 ||
-			this.x >= myGameArea.canvas.width - this.width + 100
-		) {
+		if (this.x <= 0 || this.x >= myGameArea.canvas.width - this.width) {
 			this.speedX = -this.speedX;
 		}
 	};
@@ -216,42 +208,41 @@ function updateGameArea() {
 			myObstacles[i].moveHorizontally();
 		}
 		if (myGamePiece.crashWith(myObstacles[i])) {
-			if (score < 15) {
-				myGameArea.stop();
-				gameOver = true;
-				removeDPad();
-                // Play losing sound
-                var loseAudio = document.getElementById("lose-audio");
-                if (loseAudio) {
-                    loseAudio.currentTime = 0;
-                    loseAudio.volume = 1;
-                    loseAudio.muted = false;
-                    loseAudio.play().catch(function(e) {
-                        alert("Click OK to play the losing sound!");
-                        loseAudio.play();
-                    });
-                }
-				setTimeout(function () {
-					var gameOverImage = new Image();
-					gameOverImage.src = isPeach
-						? "images/Game_Over_Peach.png"
-						: isLuigi
-						? "images/Game_Over_Luigi.png"
-						: "images/Game_Over.png";
-					gameOverImage.onload = function () {
-						myGameArea.context.drawImage(
-							gameOverImage,
-							0,
-							0,
-							myGameArea.canvas.width,
-							myGameArea.canvas.height
-						);
-						if (!document.getElementById("restart-button")) {
-							new RestartButton(650, 400, 200, 50, "Restart Game");
-						}
-					};
-				}, 100);
+			if (score > highScore) {
+				highScore = score;
+				localStorage.setItem('coinsChaosBest', highScore);
 			}
+			myGameArea.stop();
+			gameOver = true;
+			removeDPad();
+			// Play losing sound
+			var loseAudio = document.getElementById("lose-audio");
+			if (loseAudio) {
+				loseAudio.currentTime = 0;
+				loseAudio.volume = 1;
+				loseAudio.muted = false;
+				loseAudio.play().catch(function() {});
+			}
+			setTimeout(function () {
+				var gameOverImage = new Image();
+				gameOverImage.src = isPeach
+					? "images/Game_Over_Peach.png"
+					: isLuigi
+					? "images/Game_Over_Luigi.png"
+					: "images/Game_Over.png";
+				gameOverImage.onload = function () {
+					myGameArea.context.drawImage(
+						gameOverImage,
+						0,
+						0,
+						myGameArea.canvas.width,
+						myGameArea.canvas.height
+					);
+					if (!document.getElementById("restart-button")) {
+						new RestartButton(650, 400, 200, 50, "Restart Game");
+					}
+				};
+			}, 100);
 			return;
 		}
 		myObstacles[i].update();
@@ -267,38 +258,28 @@ function updateGameArea() {
 				coinAudio.currentTime = 0;
 				coinAudio.volume = 1;
 				coinAudio.muted = false;
-				coinAudio.play().catch(function(e) {
-					// If playback is blocked, prompt user to click a button to play sound
-					alert("Click OK to play the coin sound!");
-					coinAudio.play();
-				});
+				coinAudio.play().catch(function() {});
 			}
 		} else {
 			coins[i].update();
 		}
 	}
 	updateScore();
-	if (score >= 15) {
-		Congrats();
-	}
 }
 
 function updateScore() {
-	myGameArea.context.font = "30px Arial";
-	myGameArea.context.fillStyle = "black";
-	myGameArea.context.fillText("Score: " + score, 20, 40);
+	var scoreEl = document.getElementById('dpad-score');
+	if (scoreEl) {
+		scoreEl.innerHTML = '<div>Score: ' + score + '</div><div>Best: ' + highScore + '</div>';
+	}
 }
 
 class RestartButton {
 	constructor(x, y, width, height, text) {
-		this.width = width;
-		this.height = height;
-		this.text = text;
 		this.element = document.createElement("button");
 		this.element.id = "restart-button";
-		this.element.style.width = this.width + "px";
-		this.element.style.height = this.height + "px";
-		this.element.innerHTML = this.text;
+		this.element.textContent = text;
+		this.element.style.cssText = "background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:1.4em;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.3);margin-top:16px;";
 		document
 			.getElementById("restart-button-container")
 			.appendChild(this.element);
@@ -319,18 +300,14 @@ function Congrats() {
 	);
 	removeDPad();
 
-	myGameArea.canvas.style.backgroundImage = "url('images/Congrats.png')";
+	myGameArea.canvas.style.backgroundImage = "url('images/Trophy.webp')";
 	// Play win audio with autoplay handling
 	var winAudio = document.getElementById("win-audio");
 	if (winAudio) {
 		winAudio.currentTime = 0;
 		winAudio.volume = 1;
 		winAudio.muted = false;
-		winAudio.play().catch(function(e) {
-			// If playback is blocked, prompt user to click a button to play sound
-			alert("Click OK to play the win sound!");
-			winAudio.play();
-		});
+		winAudio.play().catch(function() {});
 	}
 	if (!document.getElementById("restart-button")) {
 		new RestartButton(0, 0, 200, 50, "Restart Game");
@@ -350,12 +327,12 @@ function showControlChoiceModal(callback) {
     if (document.getElementById('control-choice-modal')) return;
     const modal = document.createElement('div');
     modal.id = 'control-choice-modal';
-    modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:2000;';
+    modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;';
     modal.innerHTML = `
-      <div style="background:#fff;padding:32px 24px;border-radius:16px;box-shadow:0 4px 32px #0008;text-align:center;max-width:90vw;">
-        <h2 style='margin-bottom:18px;'>How do you want to move?</h2>
-        <button id="choose-dpad" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Show Arrow Buttons</button>
-        <button id="choose-keys" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;">Use Keyboard Arrows</button>
+      <div style="background:linear-gradient(160deg,#0d1137,#06061a);padding:32px 24px;border-radius:16px;box-shadow:0 0 40px rgba(139,92,246,0.3);text-align:center;max-width:90vw;border:1px solid rgba(139,92,246,0.3);">
+        <h2 style='margin-bottom:18px;color:#e0d8f8;font-size:1.8em;'>Controls</h2>
+        <button id="choose-dpad" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Show Arrow Buttons</button>
+        <button id="choose-keys" style="margin:12px 16px;padding:12px 24px;font-size:1.2em;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Use Keyboard Arrows</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -374,12 +351,24 @@ function createDPad() {
     const dpad = document.createElement('div');
     dpad.id = 'dpad-container';
     dpad.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;position:fixed;bottom:30px;left:30px;z-index:1000;">
-        <button class="dpad-btn" id="dpad-up">▲</button>
-        <div style="display:flex;flex-direction:row;">
-          <button class="dpad-btn" id="dpad-left">◀</button>
-          <button class="dpad-btn" id="dpad-down">▼</button>
-          <button class="dpad-btn" id="dpad-right">▶</button>
+      <div style="display:flex;flex-direction:column;align-items:center;position:fixed;bottom:30px;left:0;right:0;z-index:1000;pointer-events:none;">
+        <!-- Score display between canvas and buttons -->
+        <div id="dpad-score" style="text-align:center;margin-bottom:8px;pointer-events:auto;font:bold 18px Arial;color:white;text-shadow:0 0 8px rgba(139,92,246,0.5);">
+          <div>Score: 0</div>
+          <div>Best: 0</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%;padding:0 30px;">
+          <!-- Bottom-left: Left & Right -->
+          <div style="display:flex;gap:8px;pointer-events:auto;">
+            <button class="dpad-btn" id="dpad-left">&#9668;</button>
+            <button class="dpad-btn" id="dpad-right">&#9658;</button>
+          </div>
+          <!-- Bottom-center: Home -->
+          <button id="dpad-home" style="pointer-events:auto;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1.2em;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.25);">Home</button>
+        <!-- Bottom-right: Up & Down -->
+        <div style="display:flex;gap:8px;pointer-events:auto;">
+          <button class="dpad-btn" id="dpad-up">&#9650;</button>
+          <button class="dpad-btn" id="dpad-down">&#9660;</button>
         </div>
       </div>
     `;
@@ -388,10 +377,14 @@ function createDPad() {
     const style = document.createElement('style');
     style.textContent = `
       .dpad-btn {
-        width: 48px; height: 48px; margin: 4px; font-size: 2em; border-radius: 12px; border: 2px solid #333; background: #eee; color: #222; box-shadow: 1px 1px 4px #aaa; }
-      .dpad-btn:active { background: #ccc; }
+        width: 48px; height: 48px; margin: 0; font-size: 2em; border-radius: 12px; border: none; background: linear-gradient(135deg,#ef4444,#dc2626); color: #fff; box-shadow: 0 4px 15px rgba(239,68,68,0.4); }
+      .dpad-btn:active { background: #c82333; }
     `;
     document.head.appendChild(style);
+    // Home button listener
+    document.getElementById('dpad-home').onclick = function() {
+      window.location.href = '../index.html';
+    };
     // D-pad event listeners
     const keyMap = { 'dpad-up': 38, 'dpad-down': 40, 'dpad-left': 37, 'dpad-right': 39 };
     Object.keys(keyMap).forEach(id => {

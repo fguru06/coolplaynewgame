@@ -21,10 +21,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 // --- Auth UI Elements ---
-const emailInput = document.getElementById('emailInput');
-const passwordInput = document.getElementById('passwordInput');
-const signUpBtn = document.getElementById('signUpBtn');
-const signInBtn = document.getElementById('signInBtn');
+const googleSignInBtn = document.getElementById('googleSignInBtn');
 const authStatus = document.getElementById('authStatus');
 const saveBtn = document.getElementById('saveBtn');
 
@@ -301,11 +298,24 @@ if (saveBtn) {
   saveBtn.addEventListener('click', saveGameState);
 }
 
+if (googleSignInBtn) {
+  googleSignInBtn.addEventListener('click', () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        authStatus.textContent = 'Signed in as: ' + result.user.displayName;
+      })
+      .catch((error) => {
+        authStatus.textContent = 'Sign in unavailable in this browser.';
+      });
+  });
+}
+
 auth.onAuthStateChanged((user) => {
   if (user) {
     authStatus.textContent = 'Signed in as: ' + user.email;
     loadGameState();
   } else {
-    authStatus.textContent = 'Not signed in.';
+    authStatus.textContent = '';
   }
 });
