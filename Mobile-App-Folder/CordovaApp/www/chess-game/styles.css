@@ -242,6 +242,7 @@ h1 { margin-bottom: 10px; font-size: clamp(2rem, 4vw, 3.4rem); color: #e8e0ff; }
     position: fixed; inset: 0;
     background: rgba(5, 3, 20, 0.65);
     display: grid; place-items: center; padding: 20px;
+    z-index: 200;
 }
 .promotion-modal.hidden { display: none; }
 

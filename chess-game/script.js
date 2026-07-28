@@ -385,17 +385,56 @@ function makeCpuMove() {
     const allMoves = getAllLegalMoves(state, "black");
     if (allMoves.length === 0) return;
 
-    // Pick a random legal move
-    const randomMove = allMoves[Math.floor(Math.random() * allMoves.length)];
+    // Score each move — favour weak, non-threatening moves so beginners can easily win
+    const scored = allMoves.map(function(move) {
+        var piece = state.board[move.fromRow][move.fromCol];
+        var score = 0;
+
+        // Prefer moving pawns (weakest pieces)
+        if (piece.type === "pawn") {
+            score += 50;
+        } else if (piece.type === "king") {
+            score -= 10; // Slightly avoid moving the king
+        } else {
+            score += 20; // Other pieces are OK but not as good as pawns
+        }
+
+        // Avoid captures — let the player keep their pieces
+        if (move.capture) {
+            score -= 100;
+        }
+
+        // Avoid checks — don't alert the player
+        if (move.checkSuffix === "+" || move.checkSuffix === "#") {
+            score -= 80;
+        }
+
+        // Avoid castling — keep the king exposed
+        if (move.castle) {
+            score -= 60;
+        }
+
+        // Add randomness so it's not fully predictable
+        score += Math.random() * 30;
+
+        return { move: move, score: score };
+    });
+
+    // Sort by score descending (highest = worst move for CPU)
+    scored.sort(function(a, b) { return b.score - a.score; });
+
+    // Pick from the top 3 worst moves (adds variety)
+    var topMoves = scored.slice(0, Math.min(3, scored.length));
+    var chosen = topMoves[Math.floor(Math.random() * topMoves.length)].move;
 
     // Simulate selection
-    state.selected = { row: randomMove.fromRow, col: randomMove.fromCol };
-    state.legalMoves = getLegalMovesForPiece(state, randomMove.fromRow, randomMove.fromCol);
+    state.selected = { row: chosen.fromRow, col: chosen.fromCol };
+    state.legalMoves = getLegalMovesForPiece(state, chosen.fromRow, chosen.fromCol);
     state.message = "CPU is thinking...";
 
     // Commit the move
-    const moveToCommit = state.legalMoves.find(
-        (m) => m.toRow === randomMove.toRow && m.toCol === randomMove.toCol
+    var moveToCommit = state.legalMoves.find(
+        function(m) { return m.toRow === chosen.toRow && m.toCol === chosen.toCol; }
     );
     if (moveToCommit) {
         commitMove(moveToCommit);

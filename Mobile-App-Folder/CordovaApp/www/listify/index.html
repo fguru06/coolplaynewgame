@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listify — List Maker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <button onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+
+  <div class="app">
+    <header>
+      <h1>📋 Listify</h1>
+      <p class="subtitle">Create, manage, and organize your lists</p>
+    </header>
+
+    <div class="list-selector">
+      <label for="list-name-input">List name:</label>
+      <div class="list-name-row">
+        <input type="text" id="list-name-input" placeholder="e.g. Groceries, Tasks, Goals..." maxlength="40">
+        <button id="create-list-btn">+ New List</button>
+      </div>
+    </div>
+
+    <div class="lists-area" id="lists-area">
+      <p class="empty-state" id="empty-state">No lists yet. Create one above!</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

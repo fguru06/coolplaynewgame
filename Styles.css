@@ -241,10 +241,16 @@ body.is-ready .site-header {
     z-index: 1;
 }
 
-.main-logo-area { text-align: center; margin: 0 0 22px; }
+.main-logo-area { text-align: center; margin: 0 0 22px; position: relative; }
+.main-logo-area::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    width: 180px; height: 180px; margin: 0 auto;
+    background: radial-gradient(ellipse, rgba(139,92,246,0.35), transparent 70%);
+    border-radius: 50%;
+    left: 50%; transform: translateX(-50%); top: 10px;
+}
 .main-logo-svg {
-    width: 180px; max-width: 90vw; height: auto; display: inline-block;
-    filter: drop-shadow(0 14px 24px rgba(139,92,246,0.35));
+    width: 180px; max-width: 90vw; height: auto; display: block; margin: 0 auto;
 }
 
 /* ── Network / Sync ── */

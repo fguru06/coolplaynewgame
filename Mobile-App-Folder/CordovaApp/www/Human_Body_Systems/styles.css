@@ -201,7 +201,7 @@ h1 {
 .modal .question {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #222;
+  color: #e0d8f8;
   margin-bottom: 14px;
   text-align: left;
 }
@@ -218,7 +218,7 @@ h1 {
   font-size: 0.95rem;
   padding: 6px 0;
   cursor: pointer;
-  color: #333;
+  color: #d0c8f0;
 }
 
 .modal .options input[type="radio"] {
@@ -244,7 +244,7 @@ h1 {
 .modal .saved-msg {
   margin-top: 12px;
   font-size: 0.9rem;
-  color: #1565c0;
+  color: #06d6a0;
   display: none;
 }
 

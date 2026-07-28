@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpinIt — Wheel Spinner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <button onclick="window.location.href='../index.html'" class="home-btn">Home</button>
+
+  <div class="app">
+    <header>
+      <h1>🎡 SpinIt</h1>
+      <p class="subtitle">Add your options and give the wheel a spin!</p>
+    </header>
+
+    <div class="controls">
+      <div class="input-row">
+        <input type="text" id="option-input" placeholder="Enter an option..." maxlength="40">
+        <button id="add-btn">+ Add</button>
+      </div>
+
+      <div class="options-display" id="options-display">
+        <p class="empty-msg" id="empty-msg">No options yet. Add some above!</p>
+      </div>
+
+      <div class="action-row">
+        <button id="spin-btn" disabled>🎡 Spin the Wheel!</button>
+        <button id="clear-btn" class="secondary">Clear All</button>
+      </div>
+    </div>
+
+    <div class="wheel-section">
+      <canvas id="wheel-canvas" width="480" height="480"></canvas>
+      <div class="pointer">▼</div>
+    </div>
+
+    <div class="result" id="result" hidden>
+      <p class="result-label">The wheel says...</p>
+      <p class="result-value" id="result-value"></p>
+      <button id="remove-result-btn" class="secondary">Remove & Spin Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
