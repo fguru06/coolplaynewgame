@@ -17,13 +17,15 @@ var highScore = parseInt(localStorage.getItem('coinsChaosBest')) || 0;
 var gameOver = false;
 var isLuigi = false;
 var isPeach = false;
+var isToad = false;
 var useDPad = false;
 
-function handleCharacterChoice(imageSrc, luigi, peach) {
+function handleCharacterChoice(imageSrc, luigi, peach, toad) {
     showControlChoiceModal(function(wantsDPad) {
         useDPad = wantsDPad;
         isLuigi = luigi;
         isPeach = peach;
+        isToad = toad;
         startGame(imageSrc);
         if (useDPad) createDPad();
     });
@@ -36,7 +38,10 @@ document.getElementById("luigi-button").addEventListener("click", function () {
     handleCharacterChoice("images/Luigi_Jump.png", true, false);
 });
 document.getElementById("peach-button").addEventListener("click", function () {
-    handleCharacterChoice("images/Peach_Jump.png", false, true);
+    handleCharacterChoice("images/Peach_Jump.png", false, true, false);
+});
+document.getElementById("toad-button").addEventListener("click", function () {
+    handleCharacterChoice("images/toad.png", false, false, true);
 });
 
 function startGame(imageSrc) {
@@ -45,6 +50,8 @@ function startGame(imageSrc) {
 	myImage.src = imageSrc;
 	if (isPeach) {
 		myGamePiece = new component(40, 100, myImage, 10, 720);
+	} else if (isToad) {
+		myGamePiece = new component(60, 100, myImage, 10, 720);
 	} else {
 		myGamePiece = new component(70, 100, myImage, 10, 720);
 	}

@@ -110,6 +110,16 @@ button:hover {
     box-shadow: 0 8px 25px rgba(255, 209, 102, 0.40);
 }
 
+#toad-button {
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+#toad-button:hover {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.40);
+}
+
 #restart-button-container {
     text-align: center;
     margin-top: 20px;

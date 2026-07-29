@@ -1,5 +1,6 @@
-﻿// v6 — dead simple: cache everything from static manifest, serve cache-first
-var CACHE = "coolplay-v6";
+﻿// v16 — dead simple: cache everything from static manifest, serve cache-first
+var CACHE = "coolplay-v16"; — dead simple: cache everything from static manifest, serve cache-first
+var CACHE = "coolplay-v15";
 var MANIFEST = "/offline-assets.json";
 var SYNC_TAG = "coolplay-offline-sync";
 

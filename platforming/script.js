@@ -170,6 +170,7 @@
   var dPadButtons = [];
   var isLuigi = false;
   var isPeach = false;
+  var isToad = false;
 
   // ── DOM refs ──
   var canvas = document.getElementById('gameCanvas');
@@ -215,6 +216,9 @@
   document.getElementById('peach-button').addEventListener('click', function () {
     chooseCharacter('../drag-game/images/Peach_Jump.png', false, true);
   });
+  document.getElementById('toad-button').addEventListener('click', function () {
+    chooseCharacter('../drag-game/images/toad.png', false, false, true);
+  });
 
   // Show continue button if saved progress exists
   var saved = loadProgress();
@@ -241,9 +245,10 @@
     });
   }
 
-  function chooseCharacter(src, luigi, peach) {
+  function chooseCharacter(src, luigi, peach, toad) {
     isLuigi = luigi;
     isPeach = peach;
+    isToad = toad;
     playerImg.src = src;
     clearProgress();
     currentLevel = 0;
@@ -285,6 +290,8 @@
     var ps = lv.playerStart;
     if (isPeach) {
       player = { x: ps.x, y: ps.y, w: 65, h: 120, vx: 0, vy: 0, onGround: false, jumpCount: 0 };
+    } else if (isToad) {
+      player = { x: ps.x, y: ps.y, w: 70, h: 120, vx: 0, vy: 0, onGround: false, jumpCount: 0 };
     } else {
       player = { x: ps.x, y: ps.y, w: 80, h: 130, vx: 0, vy: 0, onGround: false, jumpCount: 0 };
     }

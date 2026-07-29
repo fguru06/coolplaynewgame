@@ -8,33 +8,114 @@
         <link rel="icon" type="image/svg+xml" href="icon-512.svg">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6c5ce7">
+    <!-- Firebase Auth (compat SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <style>
         /* Small inline safety styles so page looks ok before external CSS loads */
         
     </style>
 </head>
 <body>
-    <header class="site-header"></header>
+    <header class="site-header">
+        <div class="site-header__inner">
+            <span class="site-header__title">Coolplay's Games</span>
+            <div class="site-header__auth">
+                <button id="googleSignInBtn" class="auth-btn">Sign in with Google</button>
+                <span class="auth-status" id="authStatus"></span>
+            </div>
+
+        </div>
+    </header>
 
     <main class="home">
         <div class="main-logo-area">
             <img src="icon-512.svg" alt="Coolplay's Games And More" class="main-logo-svg">
         </div>
-            <div id="network-banner" class="network-banner network-banner--hidden" aria-live="polite">
-                <span id="network-banner-text">Checking connection...</span>
-                <span id="network-banner-badge" class="network-banner__badge" hidden>0 queued actions</span>
-            </div>
-            <section class="sync-panel" aria-live="polite">
-                <p id="sync-state-text" class="sync-panel__title">Checking connection...</p>
-                <p id="app-state-text" class="sync-panel__meta">Loading the latest app snapshot...</p>
-            </section>
+            <!-- Hidden — kept for offline-sync.js internal use -->
+            <p id="sync-state-text" hidden></p>
+            <p id="app-state-text" hidden></p>
             <button id="install-btn" style="display:none;margin:18px auto 0;padding:12px 28px;font-size:1rem;background:linear-gradient(90deg,#8b5cf6,#6d28d9);color:#fff;border:none;border-radius:999px;cursor:pointer;box-shadow:0 4px 15px rgba(139,92,246,0.3);transition:all 0.3s ease;">Install App</button>
-            <p id="install-status"></p>
+            <p id="install-status" style="display:none"></p>
         <section class="intro">
             <p>Choose a game to play. Works on desktop and mobile — show arrow buttons on touch devices.</p>
         </section>
         <script src="offline-sync.js"></script>
         <script>
+        // ── Firebase Auth ──
+        if (window.location.protocol === 'file:') {
+            document.getElementById('googleSignInBtn').addEventListener('click', function() {
+                document.getElementById('authStatus').textContent = 'Sign-in Error';
+                document.getElementById('authStatus').style.color = '#f87171';
+            });
+        } else {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAsGGlwn38cZwq2jjTtgTP0pgW_wzB8R7s",
+                authDomain: "games-55555.firebaseapp.com",
+                projectId: "games-55555",
+                storageBucket: "games-55555.firebasestorage.app",
+                messagingSenderId: "977098217661",
+                appId: "1:977098217661:web:4b34866410be906fafbfd4",
+                measurementId: "G-RG01KQXM5L"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+
+            const googleSignInBtn = document.getElementById('googleSignInBtn');
+            const authStatusEl = document.getElementById('authStatus');
+
+
+            // Handle redirect result (in case popup fails and we fall back to redirect)
+            auth.getRedirectResult().catch(function(error) {
+                console.error('Redirect auth error:', error.code);
+            });
+
+            // ── Handle email link redirect (user clicked link in their email) ──
+            if (auth.isSignInWithEmailLink(window.location.href)) {
+                var email = localStorage.getItem('emailForSignIn');
+                if (!email) {
+                    email = window.prompt('Please enter your email for confirmation:');
+                }
+                if (email) {
+                    auth.signInWithEmailLink(email, window.location.href).then(function() {
+                        localStorage.removeItem('emailForSignIn');
+                    }).catch(function(error) {
+                        authStatusEl.textContent = 'Link sign-in error: ' + error.message;
+                        authStatusEl.style.color = '#f87171';
+                    });
+                }
+            }
+
+            // ── Google sign-in (popup with redirect fallback) ──
+            googleSignInBtn.addEventListener('click', function() {
+                if (auth.currentUser) {
+                    auth.signOut();
+                } else {
+                    var provider = new firebase.auth.GoogleAuthProvider();
+                    auth.signInWithPopup(provider).catch(function(error) {
+                        // Popup failed — fall back to redirect
+                        console.warn('Popup failed (' + error.code + '), falling back to redirect');
+                        auth.signInWithRedirect(provider);
+                    });
+                }
+            });
+
+            // ── Auth state ──
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    googleSignInBtn.textContent = 'Sign Out';
+                    authStatusEl.textContent = user.email;
+                    authStatusEl.style.color = '#a8a8d4';
+                    localStorage.setItem('coolplay_user', JSON.stringify({ uid: user.uid, email: user.email, displayName: user.displayName }));
+                } else {
+                    googleSignInBtn.textContent = 'Sign in with Google';
+                    authStatusEl.textContent = '';
+                    localStorage.removeItem('coolplay_user');
+                }
+            });
+        }
+
+        // ── App bootstrap ──
         const offlineSync = window.CoolplayOffline;
 
         // Register service worker — force update to latest
@@ -80,7 +161,6 @@
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
         const installStatus = document.getElementById('install-status');
-        const appStateText = document.getElementById('app-state-text');
         const userAgent = window.navigator.userAgent;
         const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
         const isWindows = /windows/i.test(userAgent);
@@ -90,7 +170,6 @@
             if (window.location.port === '3000') {
                 return '/install-app';
             }
-
             return 'http://localhost:3000/install-app';
         }
 
@@ -98,46 +177,16 @@
             if (!offlineSync) {
                 throw new Error('Offline support did not load correctly.');
             }
-
             const result = await offlineSync.sendQueuedMutation({
                 url: getInstallServiceUrl(),
                 method: 'POST',
                 description: 'Install app request',
                 queuedMessage: 'Install request saved offline. It will retry automatically when the connection returns.'
             });
-
             if (result.queued) {
-                return {
-                    ok: true,
-                    queued: true,
-                    message: result.message
-                };
+                return { ok: true, queued: true, message: result.message };
             }
-
             return result.data || { ok: true, message: 'Install flow started.' };
-        }
-
-        async function loadAppState() {
-            if (!offlineSync || !appStateText) {
-                return;
-            }
-
-            try {
-                const result = await offlineSync.cachedFetchJson('/api/app-state');
-                const sourceLabel = result.source === 'cache' ? 'Cached offline snapshot' : 'Live snapshot';
-                const refreshedAt = new Date(result.cachedAt || result.data.generatedAt).toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: '2-digit'
-                });
-                const installAvailability = result.data.installServiceAvailable
-                    ? 'Install service available on this machine.'
-                    : 'Install service unavailable until the Node server can reach Microsoft Edge.';
-
-                const message = sourceLabel + ': ' + result.data.experienceCount + ' playable pages and ' + result.data.offlineAssetCount + ' cached assets ready. Refreshed at ' + refreshedAt + '. ' + installAvailability;
-                offlineSync.setAppStateText(message);
-            } catch (error) {
-                offlineSync.setAppStateText('Open the app online once to seed its local data cache.');
-            }
         }
 
         function isStandaloneMode() {
@@ -150,24 +199,22 @@
         }
 
         if (isStandaloneMode()) {
-            setInstallUi(false, 'App is already installed on this device.');
+            setInstallUi(false, '');
         } else if (isWindows) {
-            setInstallUi(true, isVsCodeBrowser
-                ? 'Tap Install App to open this page in Edge and install it there.'
-                : 'Tap Install App to install this game collection in Edge.');
+            setInstallUi(true, '');
         } else if (isIos) {
             setInstallUi(false, 'On iPhone or iPad, use Share and then Add to Home Screen.');
         } else {
             setInstallUi(false, 'Install becomes available automatically in a supported browser once the app is ready.');
         }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
+        window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             deferredPrompt = e;
             setInstallUi(true, 'Tap Install App to add this app to your device.');
         });
 
-        installBtn.addEventListener('click', async () => {
+        installBtn.addEventListener('click', async function() {
             if (!deferredPrompt && isWindows) {
                 try {
                     await startEdgeInstall();
@@ -178,11 +225,10 @@
                 }
                 return;
             }
-
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
+                var outcome = await deferredPrompt.userChoice;
+                if (outcome.outcome === 'accepted') {
                     setInstallUi(false, 'Installing app...');
                 } else {
                     setInstallUi(true, 'Install was dismissed. You can try again.');
@@ -190,7 +236,6 @@
                 deferredPrompt = null;
                 return;
             }
-
             if (isStandaloneMode()) {
                 setInstallUi(false, 'App is already installed on this device.');
             } else if (isIos) {
@@ -200,14 +245,10 @@
             }
         });
 
-        window.addEventListener('appinstalled', () => {
+        window.addEventListener('appinstalled', function() {
             deferredPrompt = null;
             setInstallUi(false, 'App installed successfully.');
         });
-
-        loadAppState();
-
-        document.body.classList.add('is-loading');
 
         function finishEntrance() {
             document.body.classList.add('is-ready');

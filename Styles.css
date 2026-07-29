@@ -225,13 +225,58 @@ body.is-ready .site-header {
 
 /* ── Site Header ── */
 .site-header {
-    padding: 22px 18px;
+    padding: 10px 18px;
     background: linear-gradient(90deg, #1a0a3a, #0d1b4a, #1a0a3a);
     color: var(--text-primary);
     border-bottom: 1px solid rgba(139,92,246,0.2);
     position: relative;
     z-index: 1;
 }
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.site-header__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #e0d8f8;
+    text-shadow: 0 0 12px rgba(139,92,246,0.3);
+}
+.site-header__auth {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.auth-btn {
+    background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(139,92,246,0.25);
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+.auth-btn:hover {
+    background: linear-gradient(90deg, #9b6cf8, #7c3aed);
+    box-shadow: 0 6px 20px rgba(139,92,246,0.4);
+    transform: translateY(-1px);
+}
+.auth-status {
+    font-size: 0.85rem;
+    color: #a8a8d4;
+    white-space: nowrap;
+}
+
 
 .home {
     padding: 24px;

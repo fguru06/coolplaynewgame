@@ -29,7 +29,8 @@ body {
 #image-selection button,
 #image-selection #mario-button,
 #image-selection #luigi-button,
-#image-selection #peach-button {
+#image-selection #peach-button,
+#image-selection #toad-button {
   color: white;
   font-weight: bold;
   font-size: 2em;
@@ -44,8 +45,15 @@ body {
   box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
 }
 
-#image-selection button:not(#mario-button):not(#luigi-button):not(#peach-button) {
+#image-selection button:not(#mario-button):not(#luigi-button):not(#peach-button):not(#toad-button) {
   background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+}
+
+#toad-button {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+#toad-button:hover {
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.40);
 }
 
 #image-selection button:hover {

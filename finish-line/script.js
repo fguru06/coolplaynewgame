@@ -5,6 +5,7 @@ var myImage = new Image();
 var gameOver = false;
 var isLuigi = false;
 var isPeach = false; // Add flag for Peach
+var isToad = false; // Add flag for Toad
 var useDPad = false;
 var myObstacleImage = new Image();
 myObstacleImage.src = "images/Spike.png";
@@ -13,11 +14,17 @@ finishLineImage.src = "images/Trophy.png";
 var gravity = 0.05; // Add gravity
 var onGround = false; // Add flag to check if character is on the ground
 
-function handleCharacterChoice(imageSrc, luigi, peach) {
+// Timer variables
+var timerStartTime = null;
+var timerRunning = false;
+var timerElapsed = 0;
+
+function handleCharacterChoice(imageSrc, luigi, peach, toad) {
 	showControlChoiceModal(function(wantsDPad) {
 		useDPad = wantsDPad;
 		isLuigi = luigi;
 		isPeach = peach;
+		isToad = toad;
 		startGame(imageSrc);
 		if (useDPad) createDPad();
 	});
@@ -30,7 +37,10 @@ document.getElementById("luigi-button").addEventListener("click", function () {
 	handleCharacterChoice("images/Luigi_Jump.png", true, false);
 });
 document.getElementById("peach-button").addEventListener("click", function () {
-	handleCharacterChoice("images/Peach_Jump.png", false, true);
+	handleCharacterChoice("images/Peach_Jump.png", false, true, false);
+});
+document.getElementById("toad-button").addEventListener("click", function () {
+	handleCharacterChoice("images/toad.png", false, false, true);
 });
 
 function startGame(imageSrc) {
@@ -41,6 +51,8 @@ function startGame(imageSrc) {
 	myImage.onload = function () {
 		if (isPeach) {
 			myGamePiece = new component(55, 100, myImage, 10, 720); // Adjust dimensions for Peach
+		} else if (isToad) {
+			myGamePiece = new component(60, 100, myImage, 10, 720);
 		} else {
 			myGamePiece = new component(70, 100, myImage, 10, 720);
 		}
@@ -51,6 +63,9 @@ function startGame(imageSrc) {
 		myObstacles.push(new component(60, 70, myObstacleImage, 950, 750));
 		myObstacles.push(new component(60, 70, myObstacleImage, 1200, 750));
 		gameOver = false;
+		timerStartTime = null;
+		timerRunning = false;
+		timerElapsed = 0;
 	};
 }
 
@@ -176,6 +191,24 @@ function updateGameArea() {
 	myGamePiece.update();
 	myFinishLine.update();
 
+	// Start timer on first player movement (keyboard or D-pad)
+	if (!timerRunning && myGameArea.keys && (myGameArea.keys[37] || myGameArea.keys[38] || myGameArea.keys[39])) {
+		timerStartTime = Date.now();
+		timerRunning = true;
+	}
+	// Update elapsed time
+	if (timerRunning) {
+		timerElapsed = (Date.now() - timerStartTime) / 1000;
+	}
+
+	// Draw timer
+	myGameArea.context.fillStyle = "rgba(0,0,0,0.5)";
+	myGameArea.context.fillRect(10, 10, 220, 40);
+	myGameArea.context.fillStyle = "#fff";
+	myGameArea.context.font = "bold 22px Arial";
+	myGameArea.context.textAlign = "left";
+	myGameArea.context.fillText("Time: " + timerElapsed.toFixed(2) + "s", 20, 38);
+
 	if (myGamePiece.x < 0) {
 		myGamePiece.x = 0; // Stop at the left wall
 	} else if (myGamePiece.x + myGamePiece.width > myGameArea.canvas.width) {
@@ -197,6 +230,7 @@ function updateGameArea() {
 		if (myGamePiece.crashWith(myObstacles[i])) {
 			myGameArea.stop();
 			gameOver = true;
+			timerRunning = false;
 			// Play losing sound
 			var loseAudio = document.getElementById("lose-audio");
 			if (loseAudio) {
@@ -220,6 +254,14 @@ function updateGameArea() {
 						myGameArea.canvas.width,
 						myGameArea.canvas.height
 					);
+					// Draw final time on game over screen
+					var ctx = myGameArea.context;
+					ctx.fillStyle = "rgba(0,0,0,0.6)";
+					ctx.fillRect(10, 10, 240, 44);
+					ctx.fillStyle = "#ff6b6b";
+					ctx.font = "bold 22px Arial";
+					ctx.textAlign = "left";
+					ctx.fillText("Time: " + timerElapsed.toFixed(2) + "s", 20, 40);
 					if (!document.getElementById("restart-button")) {
 						new RestartButton(650, 400, 200, 50, "Restart Game");
 					}
@@ -232,6 +274,7 @@ function updateGameArea() {
 	if (myGamePiece.crashWith(myFinishLine)) {
 		myGameArea.stop();
 		gameOver = true;
+		timerRunning = false;
 		// Hide the game piece, finish line, and obstacles
 		myGamePiece = null;
 		myFinishLine = null;
@@ -247,6 +290,14 @@ function updateGameArea() {
             winAudio.muted = false;
             winAudio.play().catch(function() {});
         }
+		// Draw final time on canvas
+		var ctx = myGameArea.context;
+		ctx.fillStyle = "rgba(0,0,0,0.6)";
+		ctx.fillRect(10, 10, 280, 50);
+		ctx.fillStyle = "#ffd700";
+		ctx.font = "bold 26px Arial";
+		ctx.textAlign = "left";
+		ctx.fillText("Finish Time: " + timerElapsed.toFixed(2) + "s", 20, 46);
 		// Show the restart button
 		if (!document.getElementById("restart-button")) {
 			new RestartButton(650, 400, 200, 50, "Restart Game");
