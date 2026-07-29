@@ -29,6 +29,13 @@
         <button id="spin-btn" disabled>🎡 Spin the Wheel!</button>
         <button id="clear-btn" class="secondary">Clear All</button>
       </div>
+      <div class="save-row">
+        <button id="save-btn" class="secondary" disabled>💾 Save Wheel</button>
+      </div>
+      <div class="saved-wheels" id="saved-wheels" hidden>
+        <p class="saved-title">Saved Wheels</p>
+        <div class="saved-list" id="saved-list"></div>
+      </div>
     </div>
 
     <div class="wheel-section">
@@ -36,10 +43,14 @@
       <div class="pointer">▼</div>
     </div>
 
-    <div class="result" id="result" hidden>
-      <p class="result-label">The wheel says...</p>
-      <p class="result-value" id="result-value"></p>
-      <button id="remove-result-btn" class="secondary">Remove & Spin Again</button>
+    <!-- Result popup -->
+    <div class="result-overlay" id="result" hidden>
+      <div class="result-popup">
+        <div class="result-sparkle">✨</div>
+        <p class="result-label" id="result-label">Option 1</p>
+        <p class="result-wins" id="result-wins">Wins!</p>
+        <button id="remove-result-btn" class="result-btn">Remove &amp; Spin Again</button>
+      </div>
     </div>
   </div>
 

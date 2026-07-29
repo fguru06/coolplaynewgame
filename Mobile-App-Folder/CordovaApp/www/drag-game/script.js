@@ -8,7 +8,7 @@ myImage.src = "images/Mario_Jump.png";
 var myObstacleImage = new Image();
 myObstacleImage.src = "images/Goomba.png";
 var myFollowerImage = new Image();
-myFollowerImage.src = "images/OIP.webp";
+myFollowerImage.src = "images/Goomba.png";
 var coins = [];
 var coinsImage = new Image();
 coinsImage.src = "images/Coin.png";
@@ -300,7 +300,7 @@ function Congrats() {
 	);
 	removeDPad();
 
-	myGameArea.canvas.style.backgroundImage = "url('images/Trophy.webp')";
+	myGameArea.canvas.style.backgroundImage = "url('images/Trophy.png')";
 	// Play win audio with autoplay handling
 	var winAudio = document.getElementById("win-audio");
 	if (winAudio) {

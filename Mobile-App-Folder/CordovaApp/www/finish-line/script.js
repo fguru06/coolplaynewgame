@@ -7,9 +7,9 @@ var isLuigi = false;
 var isPeach = false; // Add flag for Peach
 var useDPad = false;
 var myObstacleImage = new Image();
-myObstacleImage.src = "images/Spike.webp";
+myObstacleImage.src = "images/Spike.png";
 var finishLineImage = new Image();
-finishLineImage.src = "images/Trophy.webp";
+finishLineImage.src = "images/Trophy.png";
 var gravity = 0.05; // Add gravity
 var onGround = false; // Add flag to check if character is on the ground
 
@@ -44,7 +44,7 @@ function startGame(imageSrc) {
 		} else {
 			myGamePiece = new component(70, 100, myImage, 10, 720);
 		}
-		myFinishLine = new component(70, 100, finishLineImage, 1450, 690, "finish"); // Use finish line image
+		myFinishLine = new component(100, 100, finishLineImage, 1400, 720, "finish"); // Use finish line image
 		myObstacles.push(new component(60, 70, myObstacleImage, 200, 750));
 		myObstacles.push(new component(60, 70, myObstacleImage, 450, 750));
 		myObstacles.push(new component(60, 70, myObstacleImage, 700, 750));
@@ -238,7 +238,7 @@ function updateGameArea() {
 		myObstacles = [];
 		myGameArea.clear();
 		removeDPad();
-		myGameArea.canvas.style.backgroundImage = "url('images/Trophy.webp')";
+		myGameArea.canvas.style.backgroundImage = "url('images/Trophy.png')";
         // Play win sound
         var winAudio = document.getElementById("win-audio");
         if (winAudio) {
